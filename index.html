@@ -2,214 +2,241 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#efe8d8" />
-  <meta name="description" content="À FLOR — landing page conceito para saúde, estética e cuidado da pele." />
-  <title>À FLOR — estética que não apaga você</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f3efe6" />
+  <meta name="description" content="MATÉRIA — conceito imersivo para clínica de estética e saúde da pele." />
+  <title>MATÉRIA — pele é matéria viva</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-tone="cream">
-  <div class="grain" aria-hidden="true"></div>
-  <div class="cursor-orbit" aria-hidden="true"></div>
+<body>
+  <div class="boot" aria-hidden="true">
+    <div class="boot__mark">MATÉRIA</div>
+    <div class="boot__line"><i></i></div>
+    <div class="boot__meta"><span>calibrando luz</span><b>00</b></div>
+  </div>
 
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="À Flor — início">
-      <span class="brand-mark">à</span><span>flor</span>
-    </a>
-    <div class="header-note">ESTÉTICA • PELE • PRESENÇA</div>
-    <button class="menu-trigger" type="button" aria-expanded="false" aria-controls="menu-panel">
-      <span>menu</span><i></i>
+  <canvas id="skin-canvas" aria-hidden="true"></canvas>
+  <div class="webgl-fallback" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="chrome">
+    <a class="chrome__brand" href="#inicio" aria-label="MATÉRIA — início">MATÉRIA<span>®</span></a>
+    <div class="chrome__live"><i></i><span id="scene-name">pele / matéria viva</span></div>
+    <button class="map-toggle" type="button" aria-expanded="false" aria-controls="site-map">
+      <span>mapa</span><i></i><i></i>
     </button>
+    <a class="chrome__cta" href="#contato">agendar <span>↗</span></a>
   </header>
 
-  <nav class="menu-panel" id="menu-panel" aria-hidden="true">
-    <div class="menu-panel__inner">
-      <p class="eyebrow">vá direto ao ponto</p>
-      <a href="#cuidados">Cuidados</a>
-      <a href="#metodo">Como acontece</a>
-      <a href="#espaco">O espaço</a>
-      <a href="#contato">Agendar conversa</a>
-      <small>Demo comercial • conteúdo adaptável ao profissional</small>
+  <nav class="site-map" id="site-map" aria-hidden="true">
+    <div class="site-map__wash" aria-hidden="true"></div>
+    <div class="site-map__head">
+      <span>uma experiência para percorrer</span>
+      <button class="map-close" type="button">fechar ×</button>
     </div>
+    <div class="site-map__links">
+      <a href="#observacao"><small>observar</small><span>Textura</span></a>
+      <a href="#cuidados"><small>escolher</small><span>Cuidados</span></a>
+      <a href="#ritual"><small>entender</small><span>O encontro</span></a>
+      <a href="#espaco"><small>entrar</small><span>O espaço</span></a>
+      <a href="#contato"><small>começar</small><span>Conversa</span></a>
+    </div>
+    <p class="site-map__foot">demo de direção de arte para saúde & estética — conteúdo deve ser adaptado ao profissional real</p>
   </nav>
 
-  <main id="top">
-    <section class="hero tone" data-tone="cream">
-      <div class="hero-disc" aria-hidden="true"></div>
-      <div class="hero-kicker">um cuidado que começa antes do procedimento</div>
+  <main>
+    <section class="hero scene" id="inicio" data-scene="pele / matéria viva" data-orb="#ff6d4a,#f5d7cc,#231b21" data-orb-x="0.72" data-orb-y="0.02" data-orb-scale="1.18">
+      <div class="hero__signal">estética clínica<br>sem fórmula pronta</div>
 
-      <h1 class="hero-title" aria-label="À Flor">
-        <span class="hero-title__a">À</span>
-        <span class="hero-title__flor">FLOR</span>
-      </h1>
+      <div class="hero__type" aria-label="Pele é matéria viva">
+        <div class="hero__line hero__line--one"><span>PELE É</span></div>
+        <div class="hero__line hero__line--two"><span>MATÉRIA</span></div>
+        <div class="hero__line hero__line--three"><span>VIVA</span></div>
+      </div>
 
-      <figure class="hero-photo media-cut" data-parallax="0.07">
+      <figure class="hero__portrait">
         <img
-          src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2200"
-          alt="Retrato em luz quente, com textura natural da pele"
+          src="https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=82&w=1600"
+          srcset="https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=78&w=800 800w, https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=82&w=1600 1600w"
+          sizes="(max-width: 800px) 72vw, 36vw"
+          alt="Retrato editorial em close, com textura natural da pele"
           fetchpriority="high"
         />
-        <figcaption>pele real / luz real / sem filtros</figcaption>
+        <figcaption>imagem demonstrativa / pele sem alisamento digital</figcaption>
       </figure>
 
-      <div class="hero-copy">
-        <p>Estética não precisa apagar expressão, idade ou história.</p>
-        <p class="hero-copy__strong">Pode só devolver presença.</p>
-      </div>
+      <p class="hero__thought">Antes de decidir o que fazer, a gente observa o que já está aí.</p>
+      <a class="hero__start" href="#observacao"><span>entrar</span><b>↓</b></a>
+      <div class="hero__axis" aria-hidden="true"><i></i><span>superfície</span><span>estrutura</span></div>
+    </section>
 
-      <a class="round-link magnetic" href="#contato">
-        <span>quero uma<br>avaliação</span>
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 20h21M23 13l7 7-7 7"/></svg>
+    <section class="scan scene" id="observacao" data-scene="aproxime / textura é dado" data-orb="#dbff52,#a0b8ff,#111316" data-orb-x="-0.95" data-orb-y="-0.05" data-orb-scale="0.78">
+      <div class="scan__media" id="scan-media">
+        <img class="scan__base" loading="lazy" src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=78&w=1800" alt="Close editorial de pele sob luz quente" />
+        <img class="scan__detail" loading="lazy" src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=92&w=2200" alt="" aria-hidden="true" />
+        <div class="scan__ring" aria-hidden="true"><span>aproxime</span></div>
+      </div>
+      <div class="scan__copy">
+        <p class="micro">[ observação ]</p>
+        <h2>Textura não é<br><em>defeito.</em></h2>
+        <p>É informação. Por isso o cuidado começa olhando de perto — pele, rotina, expressão, tempo e o que você quer preservar.</p>
+      </div>
+      <div class="scan__readout" aria-hidden="true">
+        <span>LUZ 4.2K</span><span>TEXTURA ON</span><span>FILTRO OFF</span>
+      </div>
+    </section>
+
+    <section class="thesis scene" data-scene="não apagar / interpretar" data-orb="#ff5a3d,#efc7df,#171216" data-orb-x="0" data-orb-y="0.02" data-orb-scale="1.35">
+      <div class="thesis__ticker" aria-hidden="true">
+        <span>SEM PROMESSA IMPOSSÍVEL — SEM ROSTO PADRÃO — SEM PRESSA — SEM ROSTO PADRÃO — </span>
+      </div>
+      <p class="thesis__small">O ponto não é parecer outra pessoa.</p>
+      <div class="thesis__words" aria-label="Ler. Preservar. Cuidar.">
+        <span class="thesis-word thesis-word--a">LER.</span>
+        <span class="thesis-word thesis-word--b">PRESERVAR.</span>
+        <span class="thesis-word thesis-word--c">CUIDAR.</span>
+      </div>
+      <p class="thesis__note">Uma estética interessante não começa pelo procedimento mais vendido. Começa pelo limite entre mudar e continuar sendo você.</p>
+    </section>
+
+    <section class="protocols scene" id="cuidados" data-scene="cuidados / em movimento" data-orb="#d4ff51,#ff7252,#19181e" data-orb-x="0.75" data-orb-y="0" data-orb-scale="0.72">
+      <div class="protocols__pin">
+        <div class="protocols__rail" aria-hidden="true"><span>ARRASTE COM O SCROLL</span><i></i></div>
+        <div class="protocol-track">
+          <article class="protocol-panel protocol-panel--intro">
+            <p class="micro">[ possibilidades ]</p>
+            <h2>Não é um<br>menu de<br><em>correções.</em></h2>
+            <p class="protocol-panel__copy">É um repertório. A avaliação decide se algum deles entra — e em qual intensidade.</p>
+          </article>
+
+          <article class="protocol-panel protocol-panel--texture">
+            <div class="protocol-panel__number">T</div>
+            <figure>
+              <img loading="lazy" src="https://images.unsplash.com/photo-1764694187667-f28a05a52c0e?auto=format&fit=crop&fm=jpg&q=82&w=1600" alt="Gota de sérum em fotografia macro" />
+            </figure>
+            <div class="protocol-panel__text">
+              <p class="micro">textura / superfície</p>
+              <h3>Renovar<br>sem raspar<br>a identidade.</h3>
+              <p>Limpeza, hidratação, renovação e protocolos de pele entram como exemplo nesta demo.</p>
+            </div>
+          </article>
+
+          <article class="protocol-panel protocol-panel--structure">
+            <div class="protocol-panel__number">E</div>
+            <div class="protocol-panel__text">
+              <p class="micro">estrutura / tempo</p>
+              <h3>Sustentar<br>sem deixar<br>rastro.</h3>
+              <p>Quando o objetivo é qualidade de pele, firmeza ou estímulo, o plano nasce da leitura individual.</p>
+            </div>
+            <div class="protocol-panel__diagram" aria-hidden="true">
+              <span></span><span></span><span></span><i></i>
+            </div>
+          </article>
+
+          <article class="protocol-panel protocol-panel--expression">
+            <div class="protocol-panel__number">X</div>
+            <figure>
+              <img loading="lazy" src="https://images.unsplash.com/photo-1741896135490-4062a3b21abf?auto=format&fit=crop&fm=jpg&q=80&w=1600" alt="Composição editorial de skincare em tons vivos" />
+            </figure>
+            <div class="protocol-panel__text">
+              <p class="micro">expressão / proporção</p>
+              <h3>Mexer pouco.<br>Perceber<br>muito.</h3>
+              <p>Aqui entram apenas procedimentos realmente habilitados e oferecidos pelo profissional que usar esta base.</p>
+            </div>
+          </article>
+
+          <article class="protocol-panel protocol-panel--end">
+            <p class="micro">a regra</p>
+            <h3>Se não faz<br>sentido,<br><em>não faz.</em></h3>
+            <a href="#contato">conversar antes de escolher ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ritual scene" id="ritual" data-scene="o encontro / sem pacote" data-orb="#8ca9ff,#efe8d5,#17161a" data-orb-x="-0.65" data-orb-y="0" data-orb-scale="1.02">
+      <div class="ritual__sticky">
+        <p class="micro">[ uma consulta, quatro movimentos ]</p>
+        <h2>Você não entra<br>com um pacote.<br><em>Entra com uma pergunta.</em></h2>
+      </div>
+      <div class="ritual__steps">
+        <article data-step="escuta">
+          <b>escutar</b>
+          <p>O que te incomoda. O que não incomoda. O que você não quer perder.</p>
+        </article>
+        <article data-step="leitura">
+          <b>ler</b>
+          <p>Pele, rotina, histórico, momento e expectativa antes de sugerir qualquer caminho.</p>
+        </article>
+        <article data-step="decisão">
+          <b>decidir</b>
+          <p>Explicar possibilidades e limites de um jeito que caiba numa conversa — não num discurso.</p>
+        </article>
+        <article data-step="tempo">
+          <b>acompanhar</b>
+          <p>Porque pele responde no tempo. O cuidado continua depois da sala.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="room scene" id="espaco" data-scene="o espaço / pausa" data-orb="#ff7557,#d8ff61,#131316" data-orb-x="0.9" data-orb-y="0" data-orb-scale="0.65">
+      <div class="room__image">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1704455306251-b4634215d98f?auto=format&fit=crop&fm=jpg&q=82&w=2200" alt="Ambiente clínico contemporâneo e iluminado" />
+        <div class="room__shutter room__shutter--a"></div>
+        <div class="room__shutter room__shutter--b"></div>
+      </div>
+      <div class="room__caption">
+        <p class="micro">[ presença também é ambiente ]</p>
+        <h2>Clínico<br>sem ser<br><em>frio.</em></h2>
+        <p>Privacidade, luz, tempo para perguntar e um atendimento que não parece linha de produção.</p>
+      </div>
+      <div class="room__coord" aria-hidden="true">SÃO GABRIEL — RS<br>30°20' S / 54°19' W</div>
+    </section>
+
+    <section class="questions scene" data-scene="pergunte / antes de decidir" data-orb="#f5d5df,#ff6c4a,#19151a" data-orb-x="-0.9" data-orb-y="0.05" data-orb-scale="0.85">
+      <div class="questions__title">
+        <p class="micro">[ dúvida não atrapalha a consulta ]</p>
+        <h2>PER<br>GUN<br><em>TE.</em></h2>
+      </div>
+      <div class="questions__list">
+        <details open>
+          <summary><span>Preciso chegar sabendo o procedimento?</span><b>+</b></summary>
+          <p>Não. A avaliação existe justamente para não transformar a sua dúvida em compra por impulso.</p>
+        </details>
+        <details>
+          <summary><span>O resultado precisa ficar “visível”?</span><b>+</b></summary>
+          <p>Não necessariamente. Para esta marca-demo, naturalidade é uma escolha de direção — no projeto real, o texto segue a prática do profissional.</p>
+        </details>
+        <details>
+          <summary><span>Posso conversar e decidir depois?</span><b>+</b></summary>
+          <p>Sim. Uma boa consulta também serve para você sair entendendo melhor, mesmo que não faça nada naquele dia.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="contact scene" id="contato" data-scene="conversa / começa aqui" data-orb="#d8ff4d,#ff6247,#121315" data-orb-x="0.72" data-orb-y="0" data-orb-scale="1.22">
+      <div class="contact__eyeline">SEM PACOTE • SEM PRESSA • SEM ROSTO PADRÃO •</div>
+      <h2><span>COMEÇA</span><br><em>COM UMA</em><br><span>CONVERSA.</span></h2>
+      <a class="contact__button" href="https://wa.me/5555999999999?text=Oi%2C%20vim%20pelo%20site%20e%20queria%20entender%20como%20funciona%20a%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+        <span>abrir WhatsApp</span><b>↗</b>
       </a>
-
-      <div class="scroll-cue" aria-hidden="true"><span></span>role devagar</div>
-    </section>
-
-    <section class="manifesto tone" data-tone="coral">
-      <div class="transition-orb transition-orb--top" aria-hidden="true"></div>
-      <div class="manifesto-index">não é sobre “consertar”</div>
-      <p class="manifesto-line" data-reveal>
-        <span>A pele</span>
-        <em>muda.</em>
-      </p>
-      <p class="manifesto-line manifesto-line--indent" data-reveal>
-        <span>O cuidado</span>
-        <em>também.</em>
-      </p>
-      <div class="manifesto-note">
-        <p>Antes de qualquer técnica, existe uma conversa: o que incomoda, o que você quer preservar e o que não quer mudar.</p>
-        <svg class="scribble" viewBox="0 0 180 90" aria-hidden="true"><path d="M4 67c28-70 54-67 74-31 13 23 19 43 40 27 16-12 12-45 29-48 12-3 19 11 29 24"/></svg>
-      </div>
-    </section>
-
-    <section class="treatments tone" id="cuidados" data-tone="mint">
-      <div class="section-intro">
-        <p class="eyebrow">o que pode entrar no plano</p>
-        <h2>Cuidados escolhidos<br><i>pela sua pele,</i> não pela moda.</h2>
-        <p class="section-intro__aside">A lista abaixo é demonstrativa. Em um projeto real, entram somente os procedimentos que o profissional realmente oferece.</p>
-      </div>
-
-      <div class="treatment-list" role="list">
-        <button class="treatment-row" role="listitem" type="button" data-word="TEXTURA">
-          <span>Limpeza & renovação</span>
-          <small>para recuperar viço sem excessos</small>
-          <b>↗</b>
-        </button>
-        <button class="treatment-row" role="listitem" type="button" data-word="TEMPO">
-          <span>Estímulo de colágeno</span>
-          <small>quando o foco é qualidade de pele</small>
-          <b>↗</b>
-        </button>
-        <button class="treatment-row" role="listitem" type="button" data-word="GESTO">
-          <span>Cuidado facial</span>
-          <small>com plano construído caso a caso</small>
-          <b>↗</b>
-        </button>
-        <button class="treatment-row" role="listitem" type="button" data-word="CORPO">
-          <span>Protocolos corporais</span>
-          <small>sem promessas impossíveis</small>
-          <b>↗</b>
-        </button>
-      </div>
-      <div class="word-stage" aria-hidden="true"><span>PELE</span></div>
-    </section>
-
-    <section class="method tone" id="metodo" data-tone="lavender">
-      <div class="method-track" aria-hidden="true"><i></i></div>
-      <header class="method-header">
-        <p class="eyebrow">a experiência</p>
-        <h2>Você entra com uma pergunta.<br>Não com um pacote pronto.</h2>
-      </header>
-
-      <div class="method-flow">
-        <article>
-          <span class="verb">ouvir</span>
-          <p>Entender o que te trouxe até aqui — inclusive aquilo que você não quer perder no caminho.</p>
-        </article>
-        <article>
-          <span class="verb">ler</span>
-          <p>Observar pele, rotina, momento e possibilidades com calma. Menos catálogo; mais contexto.</p>
-        </article>
-        <article>
-          <span class="verb">cuidar</span>
-          <p>Escolher o mínimo necessário para chegar onde faz sentido para você.</p>
-        </article>
-        <article>
-          <span class="verb">acompanhar</span>
-          <p>Porque o resultado não termina na porta da clínica.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="space tone" id="espaco" data-tone="ink">
-      <div class="space-photo media-cut media-cut--wide" data-parallax="0.04">
-        <img
-          loading="lazy"
-          src="https://images.unsplash.com/photo-1763873993447-1d0be71a96d9?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=78&w=2200"
-          alt="Recepção minimalista com luz natural"
-        />
-      </div>
-      <div class="space-caption">
-        <p class="eyebrow">o espaço também cuida</p>
-        <h2>Sem pressa de clínica.<br><i>Sem pose de spa.</i></h2>
-        <p>Um lugar reservado, claro e tranquilo para conversar antes de decidir qualquer coisa.</p>
-      </div>
-      <div class="address-stamp" aria-label="Exemplo de localização">SÃO GABRIEL / RS<br>com hora marcada</div>
-    </section>
-
-    <section class="proof tone" data-tone="butter">
-      <div class="proof-quote">
-        <span class="quote-mark">“</span>
-        <blockquote>Quero me olhar no espelho e continuar me vendo. Só um pouco mais descansada.</blockquote>
-        <p>É uma frase possível de uma paciente — e também o filtro para cada decisão.</p>
-      </div>
-      <div class="proof-side">
-        <p class="eyebrow">o que esta página evita</p>
-        <p>Antes/depois forçado. Promessa de perfeição. “Rejuvenescimento em X dias”. Pressão para fechar procedimento.</p>
-        <p class="hand-note">confiança também converte.</p>
-      </div>
-    </section>
-
-    <section class="faq tone" data-tone="rose">
-      <header>
-        <p class="eyebrow">antes de marcar</p>
-        <h2>Perguntas que<br>ninguém deveria<br>ter vergonha de fazer.</h2>
-      </header>
-      <div class="faq-list">
-        <details>
-          <summary>Preciso saber qual procedimento quero?</summary>
-          <p>Não. A primeira conversa serve justamente para entender o que faz sentido — e o que não faz.</p>
-        </details>
-        <details>
-          <summary>Vou sair com “cara de procedimento”?</summary>
-          <p>A proposta desta marca-demo é trabalhar com naturalidade e decisão compartilhada. No site real, a resposta será ajustada à abordagem e habilitação do profissional.</p>
-        </details>
-        <details>
-          <summary>Posso só fazer uma avaliação?</summary>
-          <p>Sim. Conversar não obriga você a fazer nada.</p>
-        </details>
-      </div>
-    </section>
-
-    <section class="contact tone" id="contato" data-tone="deep">
-      <div class="contact-orbit" aria-hidden="true"><span>sem pressa • sem filtro • sem fórmula • </span></div>
-      <p class="eyebrow">se fez sentido</p>
-      <h2>Vem conversar<br><i>à flor da pele.</i></h2>
-      <a class="contact-cta magnetic" href="https://wa.me/5555999999999?text=Oi%2C%20vim%20pelo%20site%20e%20queria%20entender%20como%20funciona%20a%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
-        <span>abrir WhatsApp</span>
-        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 20h21M23 13l7 7-7 7"/></svg>
-      </a>
-      <footer class="site-footer">
-        <span>À FLOR — conceito demonstrativo</span>
+      <div class="contact__meta">
+        <span>MATÉRIA — conceito demonstrativo</span>
         <span>São Gabriel / RS</span>
-        <span>© 2026</span>
-      </footer>
+        <span>2026</span>
+      </div>
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
