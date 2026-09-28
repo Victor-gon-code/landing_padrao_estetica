@@ -1,38 +1,53 @@
-# À FLOR — landing page conceito
+# MATÉRIA — landing imersiva para saúde & estética
 
-Landing page estática de demonstração para o nicho saúde/estética.
+Base conceitual para apresentar a clínicas, profissionais de estética e saúde da pele. A intenção é fugir deliberadamente do padrão de landing page de clínica: sem sequência de cards, sem bento, sem glassmorphism e sem blocos corporativos previsíveis.
 
 ## Conceito
-**Pele como paisagem.** A página não trata estética como “correção”, mas como leitura, cuidado e presença. A direção visual usa cortes fotográficos irregulares, tipografia editorial grande, mudanças de cor por rolagem e movimento leve.
+**Pele é matéria viva.**
 
-## Estrutura
-- Hero editorial assimétrico
-- Manifesto
-- Tratamentos em lista tipográfica
-- Método / jornada do atendimento
-- Espaço
-- Posicionamento / prova de tom de voz
-- FAQ
-- CTA para WhatsApp
+A interface trata textura, luz, estrutura e tempo como linguagem visual. O site funciona mais como uma experiência editorial/interativa do que como um template tradicional.
 
-## Arquivos
-- `index.html`
-- `styles.css`
-- `script.js`
+## Stack
+- HTML semântico
+- CSS responsivo
+- JavaScript
+- Three.js / WebGL
+- GLSL (shader procedural da forma orgânica)
+- GSAP + ScrollTrigger
 
-## Personalização antes de apresentar a um cliente
-1. Trocar `À FLOR` pelo nome real.
-2. Trocar WhatsApp no link `wa.me`.
-3. Substituir textos de procedimentos somente pelos serviços realmente oferecidos.
-4. Trocar endereço/localização.
-5. Substituir as fotos por imagens autorizadas do profissional/estabelecimento quando houver.
-6. Revisar promessas e alegações conforme a categoria profissional e regras aplicáveis.
+## Experiências principais
+- objeto 3D orgânico deformável, reagindo a ponteiro e scroll;
+- paleta do 3D muda junto com a narrativa;
+- lente interativa de textura em fotografia macro;
+- sequência horizontal de cuidados no desktop;
+- versão vertical própria no mobile;
+- revelação cinematográfica do espaço;
+- tipografia cinética;
+- menu-mapa em tela cheia;
+- loader curto e direção de movimento consistente;
+- fallback automático se WebGL não estiver disponível;
+- redução de efeitos para aparelhos modestos e `prefers-reduced-motion`.
 
-## Performance
-- Sem framework e sem bibliotecas JS.
-- Animações usam `transform`, `opacity` e `IntersectionObserver`.
-- `prefers-reduced-motion` é respeitado.
-- No mobile, efeitos secundários são reduzidos.
+## Personalização obrigatória antes de apresentar a um cliente real
+1. Trocar `MATÉRIA` pelo nome/identidade do profissional ou clínica.
+2. Trocar o número do WhatsApp no `index.html`.
+3. Inserir apenas procedimentos que o profissional realmente oferece e está habilitado a realizar.
+4. Substituir São Gabriel/endereço se necessário.
+5. Preferir fotografias próprias do cliente. As imagens atuais são demonstrativas e vêm do Unsplash.
+6. Revisar todo texto clínico/publicitário conforme conselho profissional e categoria do cliente.
 
-## Imagens de demonstração
-O protótipo usa imagens remotas do Unsplash apenas como material de apresentação. Para produção, baixe/otimize imagens próprias ou licenciadas e sirva localmente em WebP/AVIF.
+## Imagens demonstrativas
+As fotografias remotas usadas nesta demo foram selecionadas no Unsplash e devem ser substituídas por material autorizado do cliente em produção. Para um site publicado, vale baixar, converter para WebP/AVIF e servir localmente.
+
+## Execução
+Não existe build step.
+
+Abra com Live Server no VS Code ou qualquer servidor HTTP simples:
+
+```bash
+python -m http.server 8000
+```
+
+Depois acesse `http://localhost:8000`.
+
+> Para ver WebGL e os recursos remotos corretamente, teste com conexão à internet.
