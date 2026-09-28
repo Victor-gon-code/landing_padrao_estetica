@@ -708,15 +708,21 @@ body.map-open .site-map { transform: translateY(0); }
 /* ---------- protocols ---------- */
 
 .protocols {
+  position: relative;
   min-height: 100svh;
   background: var(--dark);
   color: var(--light);
 }
 
 .protocols__pin {
-  position: relative;
+  position: sticky;
+  top: 0;
+  height: 100svh;
   min-height: 100svh;
   overflow: hidden;
+  overflow: clip;
+  background: var(--dark);
+  isolation: isolate;
 }
 
 .protocols__rail {
@@ -752,7 +758,11 @@ body.map-open .site-map { transform: translateY(0); }
 .protocol-track {
   display: flex;
   width: max-content;
+  height: 100%;
   min-height: 100svh;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .protocol-panel {
@@ -1960,4 +1970,72 @@ body.map-open .site-map { transform: translateY(0); }
 
 @keyframes ticker {
   to { transform: translateX(-50%); }
+}
+
+
+/* ---------- touch/tablet & reduced-motion protocol fallback ----------
+   Horizontal chapters are reserved for fine-pointer desktop. On touch devices
+   and reduced-motion environments, the same content stacks vertically. */
+@media (min-width: 901px) and (pointer: coarse) {
+  .protocols {
+    height: auto !important;
+  }
+
+  .protocols__pin {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .protocols__rail {
+    display: none;
+  }
+
+  .protocol-track {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    transform: none !important;
+  }
+
+  .protocol-panel {
+    width: 100%;
+    min-height: 100svh;
+    flex: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .protocols {
+    height: auto !important;
+  }
+
+  .protocols__pin {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .protocols__rail {
+    display: none;
+  }
+
+  .protocol-track {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    transform: none !important;
+  }
+
+  .protocol-panel {
+    width: 100%;
+    min-height: 100svh;
+    flex: none;
+  }
 }
