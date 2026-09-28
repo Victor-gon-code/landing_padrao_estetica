@@ -233,7 +233,9 @@ main { position: relative; z-index: 2; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(243,239,230,.98) 0%, rgba(243,239,230,.96) 42%, rgba(243,239,230,.15) 74%, rgba(243,239,230,0) 100%);
+  background:
+    linear-gradient(180deg, rgba(243,239,230,0) 0%, rgba(243,239,230,0) 82%, rgba(17,18,22,.58) 94%, #111216 100%),
+    linear-gradient(90deg, rgba(243,239,230,.98) 0%, rgba(243,239,230,.96) 42%, rgba(243,239,230,.15) 74%, rgba(243,239,230,0) 100%);
   z-index: -1;
 }
 .hero__signal {
@@ -347,7 +349,9 @@ main { position: relative; z-index: 2; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(17,18,22,.9) 0%, rgba(17,18,22,.28) 47%, rgba(17,18,22,.08) 100%);
+  background:
+    linear-gradient(180deg, #f3efe6 0%, rgba(243,239,230,.48) 6%, rgba(17,18,22,0) 18%, rgba(17,18,22,0) 82%, rgba(234,215,220,.56) 94%, #ead7dc 100%),
+    linear-gradient(90deg, rgba(17,18,22,.9) 0%, rgba(17,18,22,.28) 47%, rgba(17,18,22,.08) 100%);
   pointer-events: none;
 }
 .scan__ring {
@@ -412,7 +416,8 @@ main { position: relative; z-index: 2; }
   min-height: 120svh;
   padding: 18vh var(--pad) 10vh;
   overflow: hidden;
-  background: rgba(242,213,223,.88);
+  background:
+    linear-gradient(180deg, rgba(234,215,220,.98) 0%, rgba(234,215,220,.92) 82%, rgba(18,19,25,.82) 94%, #121319 100%);
 }
 .thesis__ticker {
   position: absolute;
@@ -596,7 +601,8 @@ main { position: relative; z-index: 2; }
 .ritual {
   min-height: 190svh;
   padding: 13vh var(--pad) 12vh;
-  background: rgba(243,239,230,.91);
+  background:
+    linear-gradient(180deg, #d8ee72 0%, rgba(243,239,230,.94) 9%, rgba(243,239,230,.94) 88%, rgba(21,22,26,.72) 97%, #15161a 100%);
   display: grid;
   grid-template-columns: .95fr 1.05fr;
   gap: 8vw;
@@ -627,7 +633,9 @@ main { position: relative; z-index: 2; }
 .room { min-height: 125svh; background: #15161a; color: #f4efe8; overflow: hidden; }
 .room__image { position: absolute; inset: 0; overflow: hidden; }
 .room__image img { filter: saturate(.72) contrast(1.03) brightness(.74); transform: scale(1.04); }
-.room__image::after { content:""; position:absolute; inset:0; background: linear-gradient(90deg, rgba(21,22,26,.82), rgba(21,22,26,.08) 55%, rgba(21,22,26,.22)); }
+.room__image::after { content:""; position:absolute; inset:0; background:
+    linear-gradient(180deg, rgba(21,22,26,0) 0%, rgba(21,22,26,0) 80%, rgba(234,215,220,.58) 94%, #ead7dc 100%),
+    linear-gradient(90deg, rgba(21,22,26,.82), rgba(21,22,26,.08) 55%, rgba(21,22,26,.22)); }
 .room__shutter { position: absolute; z-index: 3; top: 0; bottom: 0; width: 50.5%; background: #15161a; transform-origin: center; }
 .room__shutter--a { left: 0; }
 .room__shutter--b { right: 0; }
@@ -659,7 +667,8 @@ main { position: relative; z-index: 2; }
 .questions {
   min-height: 120svh;
   padding: 13vh var(--pad) 9vh;
-  background: rgba(242,213,223,.93);
+  background:
+    linear-gradient(180deg, #ead7dc 0%, rgba(234,215,220,.96) 84%, rgba(216,238,114,.84) 96%, #d8ee72 100%);
   display: grid;
   grid-template-columns: .8fr 1.2fr;
   gap: 8vw;
@@ -785,7 +794,11 @@ main { position: relative; z-index: 2; }
 
   .scan { min-height: 900px; }
   .scan__media { --x: 66%; --y: 43%; --r: 22vw; }
-  .scan__media::after { background: linear-gradient(180deg, rgba(17,18,22,.5), rgba(17,18,22,.15) 48%, rgba(17,18,22,.8)); }
+  .scan__media::after {
+    background:
+      linear-gradient(180deg, #f3efe6 0%, rgba(243,239,230,.34) 8%, rgba(17,18,22,0) 23%, rgba(17,18,22,0) 76%, rgba(234,215,220,.5) 91%, #ead7dc 100%),
+      linear-gradient(180deg, rgba(17,18,22,.52), rgba(17,18,22,.12) 48%, rgba(17,18,22,.76));
+  }
   .scan__copy { position: absolute; top: auto; left: 18px; right: 18px; bottom: 12vh; margin: 0; padding: 0; width: auto; }
   .scan__copy h2 { font-size: 17vw; }
   .scan__copy > p:last-child { width: 72vw; font-size: 11px; }
@@ -934,4 +947,398 @@ body.no-motion-lib .protocols__rail { display: none; }
   .site-map__links { margin-top: 9vh; }
   .site-map__links span { font-size: 13vw; }
   .contact__eyeline { top: 70px; }
+}
+
+
+/* --------------------------------------------------------------------------
+   MOBILE ART DIRECTION
+   The phone layout is composed independently instead of stacking desktop.
+   -------------------------------------------------------------------------- */
+.scene { scroll-margin-top: 72px; }
+
+@media (max-width: 900px) {
+  html { overflow-x: hidden; }
+  body { -webkit-text-size-adjust: 100%; }
+  #skin-canvas { opacity: .5; }
+
+  .chrome {
+    min-height: 50px;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .chrome__brand { letter-spacing: .1em; }
+  .chrome__cta { white-space: nowrap; }
+  .map-toggle { justify-self: end; }
+
+  .site-map {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .site-map__links {
+    margin-top: clamp(56px, 9vh, 88px);
+    padding-bottom: 90px;
+  }
+  .site-map__links a {
+    grid-template-columns: 58px minmax(0,1fr);
+    gap: 8px;
+    padding: 12px 0 11px;
+  }
+  .site-map__links span {
+    font-size: clamp(44px, 12vw, 68px);
+    line-height: .82;
+  }
+  .site-map__foot {
+    position: fixed;
+    left: 18px;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    width: calc(100vw - 36px);
+    padding-top: 10px;
+    background: var(--acid);
+  }
+
+  /* Hero becomes an editorial poster in normal flow. */
+  .hero {
+    min-height: auto;
+    padding: max(86px, calc(env(safe-area-inset-top) + 70px)) 18px 132px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .hero::before {
+    background:
+      linear-gradient(180deg, rgba(243,239,230,0) 0%, rgba(243,239,230,0) 87%, rgba(17,18,22,.72) 98%, #111216 100%),
+      linear-gradient(180deg, rgba(243,239,230,.98), rgba(243,239,230,.92));
+  }
+  .hero__signal {
+    position: relative;
+    inset: auto;
+    width: 160px;
+    order: 1;
+    margin: 8px 0 0;
+  }
+  .hero__portrait {
+    position: relative;
+    inset: auto;
+    order: 2;
+    width: calc(100% + 36px);
+    height: min(54svh, 520px);
+    min-height: 360px;
+    margin: 28px -18px 0;
+    clip-path: polygon(0 3%, 94% 0, 100% 91%, 8% 100%);
+  }
+  .hero__portrait figcaption {
+    right: 12px;
+    bottom: 10px;
+    background: rgba(243,239,230,.9);
+    padding: 8px 10px;
+  }
+  .hero__type {
+    position: relative;
+    inset: auto;
+    order: 3;
+    width: 100%;
+    margin-top: 28px;
+  }
+  .hero__line { overflow: visible; }
+  .hero__line span {
+    font-size: clamp(72px, 21vw, 116px);
+    line-height: .72;
+    max-width: 100%;
+  }
+  .hero__line--two,
+  .hero__line--three { margin-left: 0; }
+  .hero__line--two { padding-left: 4vw; }
+  .hero__line--three { padding-left: 29vw; }
+  .hero__thought {
+    position: relative;
+    inset: auto;
+    order: 4;
+    width: min(270px, 72vw);
+    margin: 34px 0 0 auto;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .hero__start {
+    position: relative;
+    inset: auto;
+    order: 5;
+    margin-top: 30px;
+    align-self: flex-start;
+    z-index: 4;
+  }
+  .hero__axis { display: none; }
+
+  /* Scan stays immersive but reserves real breathing room for copy and readout. */
+  .scan {
+    min-height: 100svh;
+    height: auto;
+  }
+  .scan__media { --x: 68%; --y: 38%; --r: 24vw; }
+  .scan__ring { max-width: 190px; }
+  .scan__copy {
+    left: 18px;
+    right: 18px;
+    bottom: 154px;
+    width: auto;
+  }
+  .scan__copy h2 {
+    margin-bottom: 18px;
+    font-size: clamp(58px, 16vw, 86px);
+    line-height: .86;
+  }
+  .scan__copy > p:last-child {
+    width: min(315px, 82vw);
+    font-size: 12px;
+  }
+  .scan__readout {
+    left: 18px;
+    right: 18px;
+    bottom: 86px;
+    font-size: 7px;
+  }
+
+  /* Thesis has its own rhythm and no accidental type collisions. */
+  .thesis {
+    min-height: auto;
+    padding: 126px 18px 150px;
+  }
+  .thesis__ticker {
+    top: 54px;
+    padding-top: 10px;
+  }
+  .thesis__small { margin-bottom: 64px; }
+  .thesis__words { width: 100%; }
+  .thesis-word {
+    font-size: clamp(76px, 21vw, 116px);
+    line-height: .72;
+  }
+  .thesis-word--a { margin-left: 0; }
+  .thesis-word--b { margin-left: 0; }
+  .thesis-word--c { margin-left: 12vw; }
+  .thesis__note {
+    width: min(300px, 78vw);
+    margin: 74px 0 0 auto;
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  /* Procedures read as one dark chapter on phone. Individual content supplies color. */
+  .protocols { background: #121319; }
+  .protocol-panel {
+    min-height: auto;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .protocol-panel--intro {
+    min-height: 88svh;
+    justify-content: center;
+    padding-top: 110px;
+    padding-bottom: 140px;
+  }
+  .protocol-panel--intro h2 {
+    font-size: clamp(70px, 18vw, 102px);
+    line-height: .78;
+  }
+  .protocol-panel__copy {
+    width: min(300px, 78vw);
+    margin: 46px 0 0 auto;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .protocol-panel--texture,
+  .protocol-panel--expression {
+    background: #121319;
+    color: #f1ece3;
+  }
+  .protocol-panel--structure {
+    background: #181920;
+    color: #f1ece3;
+  }
+  .protocol-panel--texture,
+  .protocol-panel--structure,
+  .protocol-panel--expression {
+    padding-top: 92px;
+    padding-bottom: 118px;
+  }
+  .protocol-panel--texture figure,
+  .protocol-panel--expression figure,
+  .procedure-slot {
+    width: calc(100% + 36px);
+    height: min(55svh, 510px);
+    min-height: 360px;
+    margin: 48px -18px 0;
+  }
+  .protocol-panel--texture figure,
+  .protocol-panel--expression figure {
+    clip-path: polygon(0 4%, 96% 0, 100% 93%, 6% 100%);
+  }
+  .protocol-panel__text {
+    margin-top: 42px;
+  }
+  .protocol-panel__text h3 {
+    font-size: clamp(55px, 14vw, 78px);
+    line-height: .84;
+    margin-bottom: 22px;
+  }
+  .protocol-panel__text > p:last-child {
+    width: min(315px, 88vw);
+    font-size: 12px;
+  }
+  .procedure-slot {
+    background:
+      linear-gradient(rgba(241,236,227,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(241,236,227,.08) 1px, transparent 1px),
+      #aab9e7;
+    background-size: 34px 34px;
+    color: #16171c;
+    border-color: rgba(20,21,26,.34);
+  }
+  .procedure-slot::before,
+  .procedure-slot__cross::before,
+  .procedure-slot__cross::after { border-color: rgba(20,21,26,.3); }
+  .protocol-panel__number {
+    position: absolute;
+    font-size: 52vw;
+    bottom: 20px;
+    opacity: .35;
+  }
+  .protocol-panel--end {
+    min-height: 82svh;
+    padding-top: 120px;
+    padding-bottom: 150px;
+  }
+  .protocol-panel--end h3 {
+    font-size: clamp(76px, 19vw, 108px);
+    line-height: .76;
+  }
+
+  /* The consultation chapter is compact and readable instead of tall for height's sake. */
+  .ritual {
+    padding: 118px 18px 152px;
+    gap: 62px;
+  }
+  .ritual__sticky h2 {
+    font-size: clamp(58px, 14.5vw, 82px);
+    line-height: .86;
+  }
+  .ritual__steps { padding-top: 0; }
+  .ritual__steps article {
+    min-height: 0;
+    padding: 44px 0 54px;
+    gap: 24px;
+  }
+  .ritual__steps b { font-size: clamp(45px, 12vw, 64px); }
+  .ritual__steps p {
+    font-size: 12px;
+    max-width: 310px;
+  }
+
+  /* Room: photograph first, caption second. No text floating over a busy image. */
+  .room {
+    min-height: auto;
+    padding: 0;
+    overflow: hidden;
+  }
+  .room__image {
+    position: relative;
+    inset: auto;
+    height: min(68svh, 620px);
+    min-height: 430px;
+  }
+  .room__image::after {
+    background:
+      linear-gradient(180deg, rgba(21,22,26,.08) 0%, rgba(21,22,26,.12) 62%, rgba(21,22,26,.86) 100%);
+  }
+  .room__caption {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    margin: 0;
+    padding: 64px 18px 154px;
+    background:
+      linear-gradient(180deg, #15161a 0%, #15161a 68%, rgba(234,215,220,.78) 94%, #ead7dc 100%);
+  }
+  .room__caption h2 {
+    font-size: clamp(68px, 18vw, 98px);
+    line-height: .78;
+  }
+  .room__caption > p:last-child {
+    margin-left: auto;
+    width: min(300px, 80vw);
+    font-size: 12px;
+  }
+  .room__coord {
+    position: absolute;
+    z-index: 5;
+    top: calc(min(68svh, 620px) - 48px);
+    right: 18px;
+    bottom: auto;
+  }
+
+  .questions {
+    padding: 118px 18px 148px;
+    gap: 62px;
+  }
+  .questions__title h2 {
+    font-size: clamp(84px, 22vw, 120px);
+    line-height: .68;
+  }
+  .questions__list { width: 100%; }
+  .questions summary {
+    padding: 25px 0;
+    font-size: clamp(19px, 5.4vw, 27px);
+  }
+  .questions details p {
+    padding-bottom: 30px;
+    font-size: 12px;
+  }
+
+  .contact {
+    min-height: 100svh;
+    padding: 120px 18px max(92px, calc(env(safe-area-inset-bottom) + 72px));
+    justify-content: center;
+  }
+  .contact__eyeline {
+    top: 72px;
+    max-width: calc(100vw - 36px);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .contact h2 {
+    font-size: clamp(64px, 18vw, 98px);
+    line-height: .73;
+    letter-spacing: -.075em;
+  }
+  .contact h2 em { margin-left: 0; }
+  .contact h2 span:last-child { margin-left: 0; }
+  .contact__button {
+    margin-top: 52px;
+    padding: 18px 0;
+  }
+  .contact__meta {
+    bottom: max(20px, env(safe-area-inset-bottom));
+    font-size: 7px;
+  }
+}
+
+/* Narrow phones: preserve composition without shrinking type into unreadability. */
+@media (max-width: 390px) {
+  .chrome { gap: 10px; }
+  .chrome__cta span { display: none; }
+  .hero { padding-bottom: 122px; }
+  .hero__portrait { min-height: 330px; }
+  .hero__line span { font-size: 20vw; }
+  .hero__line--three { padding-left: 23vw; }
+  .scan__copy { bottom: 148px; }
+  .scan__readout span:nth-child(2) { display: none; }
+  .thesis { padding-left: 16px; padding-right: 16px; }
+  .protocol-panel { padding-left: 16px; padding-right: 16px; }
+  .protocol-panel--texture figure,
+  .protocol-panel--expression figure,
+  .procedure-slot {
+    width: calc(100% + 32px);
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  .contact h2 { font-size: 17.5vw; }
 }
