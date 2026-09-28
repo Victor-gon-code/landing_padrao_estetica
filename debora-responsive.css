@@ -16,15 +16,20 @@
   .observation{min-height:1140px;padding-top:90px}.observation__media{top:120px;width:92vw;height:520px}.observation__scanner{width:150px;height:150px}.observation__copy{left:20px;right:auto;top:600px;width:86vw}.observation__copy h2{font-size:17vw}.observation__aside{left:20px;right:auto;bottom:65px;width:86vw;font-size:7px}.observation__word{font-size:31vw;top:5vh}
   .statement{min-height:760px;padding-top:120px}.statement__lead{margin-bottom:80px}.statement__type{font-size:22vw}.statement__foot{left:20px;right:auto;bottom:55px;width:80vw}
   .treatments{min-height:1230px;padding-top:90px}.treatments__head{width:94vw}.treatments__head h2{font-size:16vw}.treatments__head>p:last-child{width:86vw;font-size:12px}.treatments__visual{top:470px;width:92vw;height:470px;right:-18vw}.treatment-list{bottom:48px}.treatment-item button{grid-template-columns:36px 1fr 22px;padding:16px 0}.treatment-item__name{font-size:26px}.treatment-item.is-active .treatment-item__body{padding-left:36px}.treatment-item__body{grid-template-columns:1fr}.treatment-item__body span{display:none}.treatments__stamp{right:14px;bottom:14px;width:100px;height:100px}.treatments__stamp span{font-size:16px}.treatments__stamp b{font-size:14px}
-  .lab{min-height:1220px;padding-top:90px}.lab__title{font-size:21vw;margin:70px 0 80px}.lab__title span:nth-child(2){margin-left:0}.lab__timeline{width:100%}.lab__orb-note{display:none}
-  .gallery{min-height:1350px;padding-top:100px}.gallery__intro{width:82vw;position:relative;top:auto}.gallery__intro h2{font-size:18vw}.gallery__stage{min-height:1000px}.gallery__shot--a{top:60px;right:-6vw;width:78vw;height:450px}.gallery__shot--b{left:-5vw;top:500px;width:61vw;height:400px}.gallery__shot--c{right:-3vw;top:820px;width:56vw;height:300px}.gallery__note{bottom:40px;width:85vw;font-size:8px}
+  .lab{min-height:1220px;padding-top:90px}.lab__title{font-size:21vw;margin:70px 0 80px}.lab__title span:nth-child(2){margin-left:0}.lab__timeline{width:100%}.lab__texture-note{display:none}
+  .gallery{min-height:1350px;padding-top:100px}.gallery__intro{width:82vw;position:relative;top:auto}.gallery__intro h2{font-size:18vw}.gallery__stage{min-height:1000px}.gallery__shot--a{top:60px;right:-6vw;width:78vw;height:450px}.gallery__shot--b{left:-5vw;top:500px;width:61vw;height:400px}.gallery__shot--c{right:-3vw;top:820px;width:56vw;height:300px}
   .place{min-height:1000px}.place__copy{top:90px;width:88vw}.place__copy h2{font-size:16vw}.place__image{height:57%}.place__hours{left:20px;right:20px;width:auto;bottom:24px}.place__number{bottom:43%;font-size:42vw}
   .faq{padding-top:95px;padding-bottom:90px}.faq__head h2{font-size:19vw}.faq__head{margin-bottom:60px}.faq__list{width:100%}.faq summary{font-size:13px}.faq details p{font-size:12px;padding-right:0}
   .contact{min-height:850px;padding-top:110px}.contact__eyebrow{margin-bottom:70px}.contact__title{font-size:21vw}.contact__button{height:72px;margin-top:85px;font-size:20px}.contact__meta{margin-top:60px}.contact__signature{font-size:44vw}
 }
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.preloader__track i,.statement__ticker div,.contact__marquee span,.hero__scroll b,.observation__scanner span{animation:none!important}.reveal{opacity:1!important;transform:none!important}.webgl{display:none}.image-warp img{transform:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.preloader__track i,.statement__ticker div,.contact__marquee span,.hero__scroll b,.observation__scanner span{animation:none!important}.reveal{opacity:1!important;transform:none!important}.webgl{display:none}.image-warp img{transform:none!important}.menu,.topbar,.gallery__shot img,.treatments__photo,.treatment-item__arrow,.treatment-item__body{transition:none!important}}
 
 body[data-tone="dark"] .webgl,
 body[data-tone="ink"] .webgl,
 body[data-tone="olive"] .webgl{mix-blend-mode:screen}
+
+
+@media (max-width:980px){.scene[id]{scroll-margin-top:82px}}
+@media (max-width:640px){.scene[id]{scroll-margin-top:74px}.treatment-item.is-active .treatment-item__body{max-height:240px}}
+@media (hover:hover) and (pointer:fine){.menu__links a:hover{padding-left:20px;color:var(--acid)}.gallery__shot:hover img{transform:scale(1.055);filter:saturate(.8)}}
