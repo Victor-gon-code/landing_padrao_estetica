@@ -454,58 +454,119 @@
   const protocols = qs('.protocols');
   const protocolPin = qs('.protocols__pin');
   const protocolTrack = qs('.protocol-track');
+  const protocolPanels = protocolTrack ? qsa('.protocol-panel', protocolTrack) : [];
   const horizontalProtocolsQuery = matchMedia('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 
   let protocolState = {
     active: false,
     top: 0,
-    distance: 0,
-    viewportHeight: innerHeight
+    travel: 0,
+    step: 0,
+    segments: Math.max(0, protocolPanels.length - 1)
   };
+
   let protocolScrollTick = 0;
   let protocolMeasureTick = 0;
 
-  function updateProtocolPosition() {
+  const clamp01 = value => Math.max(0, Math.min(1, value));
+  const smoothstep = (a, b, value) => {
+    const t = clamp01((value - a) / (b - a));
+    return t * t * (3 - 2 * t);
+  };
+
+  function clearProtocolPanels() {
+    protocolPanels.forEach(panel => {
+      panel.style.removeProperty('opacity');
+      panel.style.removeProperty('visibility');
+      panel.style.removeProperty('transform');
+      panel.style.removeProperty('z-index');
+      panel.style.removeProperty('pointer-events');
+    });
+  }
+
+  function renderProtocolStage() {
     protocolScrollTick = 0;
-    if (!protocolState.active || !protocols || !protocolPin || !protocolTrack) return;
+    if (!protocolState.active || !protocols || !protocolPin || !protocolTrack || !protocolPanels.length) return;
 
-    const max = Math.max(1, protocolState.distance);
-    const progress = Math.max(0, Math.min(1, (scrollY - protocolState.top) / max));
-    const x = -protocolState.distance * progress;
+    const { top, step, segments, travel } = protocolState;
+    const local = Math.max(0, Math.min(travel, scrollY - top));
+    const position = step > 0 ? local / step : 0;
+    const baseIndex = Math.min(segments, Math.floor(position));
+    const localProgress = baseIndex >= segments ? 0 : position - baseIndex;
 
-    protocolTrack.style.transform = `translate3d(${x}px,0,0)`;
-    protocolPin.style.setProperty('--rail', `${progress * 200 - 100}%`);
+    // Hold each composition in place, then make one short, deliberate transition.
+    const mix = baseIndex >= segments ? 0 : smoothstep(.64, 1, localProgress);
+    const overall = travel > 0 ? local / travel : 0;
+
+    protocolPin.style.setProperty('--rail', `${overall * 200 - 100}%`);
+
+    protocolPanels.forEach((panel, index) => {
+      let opacity = 0;
+      let x = 0;
+      let scale = .992;
+      let z = 0;
+      let visible = false;
+
+      if (index === baseIndex) {
+        opacity = baseIndex >= segments ? 1 : 1 - (mix * .86);
+        x = -5.5 * mix;
+        scale = 1 - (.012 * mix);
+        z = 1;
+        visible = true;
+      }
+
+      if (baseIndex < segments && index === baseIndex + 1) {
+        opacity = mix;
+        x = 7.5 * (1 - mix);
+        scale = .988 + (.012 * mix);
+        z = 2;
+        visible = mix > .001;
+      }
+
+      panel.style.opacity = String(opacity);
+      panel.style.visibility = visible ? 'visible' : 'hidden';
+      panel.style.transform = `translate3d(${x}vw,0,0) scale(${scale})`;
+      panel.style.zIndex = String(z);
+      panel.style.pointerEvents = opacity > .98 ? 'auto' : 'none';
+    });
   }
 
   function measureProtocols() {
     protocolMeasureTick = 0;
-    if (!protocols || !protocolPin || !protocolTrack) return;
+    if (!protocols || !protocolPin || !protocolTrack || !protocolPanels.length) return;
 
-    const active = horizontalProtocolsQuery.matches;
-
-    if (!active) {
-      protocolState = { active: false, top: 0, distance: 0, viewportHeight: innerHeight };
+    if (!horizontalProtocolsQuery.matches) {
+      protocolState = {
+        active: false,
+        top: 0,
+        travel: 0,
+        step: 0,
+        segments: Math.max(0, protocolPanels.length - 1)
+      };
       protocols.style.removeProperty('height');
-      protocolTrack.style.removeProperty('transform');
       protocolPin.style.removeProperty('--rail');
+      clearProtocolPanels();
       return;
     }
 
-    const viewportWidth = document.documentElement.clientWidth;
     const viewportHeight = window.visualViewport?.height || innerHeight;
-    const distance = Math.max(0, protocolTrack.scrollWidth - viewportWidth);
+    const segments = Math.max(0, protocolPanels.length - 1);
+    const step = Math.max(560, viewportHeight * .92);
+    const travel = step * segments;
 
-    protocols.style.height = `${Math.ceil(viewportHeight + distance)}px`;
+    protocols.style.height = `${Math.ceil(viewportHeight + travel)}px`;
 
     const top = protocols.getBoundingClientRect().top + scrollY;
+
     protocolState = {
       active: true,
       top,
-      distance,
-      viewportHeight
+      travel,
+      step,
+      segments
     };
 
-    updateProtocolPosition();
+    renderProtocolStage();
 
     if (window.ScrollTrigger) {
       requestAnimationFrame(() => ScrollTrigger.refresh(true));
@@ -519,20 +580,20 @@
 
   function queueProtocolScroll() {
     if (protocolScrollTick || !protocolState.active) return;
-    protocolScrollTick = requestAnimationFrame(updateProtocolPosition);
+    protocolScrollTick = requestAnimationFrame(renderProtocolStage);
   }
 
   addEventListener('scroll', queueProtocolScroll, { passive: true });
   addEventListener('resize', queueProtocolMeasure, { passive: true });
-  addEventListener('orientationchange', () => setTimeout(queueProtocolMeasure, 120), { passive: true });
+  addEventListener('orientationchange', () => setTimeout(queueProtocolMeasure, 140), { passive: true });
   addEventListener('pageshow', queueProtocolMeasure);
 
   horizontalProtocolsQuery.addEventListener?.('change', queueProtocolMeasure);
   window.visualViewport?.addEventListener('resize', queueProtocolMeasure, { passive: true });
 
-  if ('ResizeObserver' in window && protocolTrack) {
+  if ('ResizeObserver' in window && protocolPin) {
     const protocolObserver = new ResizeObserver(queueProtocolMeasure);
-    protocolObserver.observe(protocolTrack);
+    protocolObserver.observe(protocolPin);
   }
 
   queueProtocolMeasure();
@@ -755,7 +816,7 @@
     const refresh = () => requestAnimationFrame(() => {
       measureProtocols();
       ScrollTrigger.refresh(true);
-      updateProtocolPosition();
+      renderProtocolStage();
     });
 
     addEventListener('load', refresh, { once: true });
