@@ -1348,3 +1348,124 @@ body.no-motion-lib .protocols__rail { display: none; }
   }
   .contact h2 { font-size: 17.5vw; }
 }
+
+
+/* ==========================================================================
+   ORGANIC CHAPTER SEAMS
+   Scene changes are drawn as moving material edges instead of background cuts.
+   ========================================================================== */
+.scene {
+  isolation: isolate;
+}
+
+.scene-bridge {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: clamp(96px, 11vw, 176px);
+  pointer-events: none;
+  z-index: 12;
+  overflow: hidden;
+  color: var(--bridge-color);
+}
+
+.scene-bridge--bottom {
+  bottom: -1px;
+}
+
+.scene-bridge--top {
+  top: -1px;
+  z-index: 1;
+}
+
+.scene-bridge svg {
+  display: block;
+  width: 104%;
+  height: 100%;
+  margin-left: -2%;
+  overflow: visible;
+  will-change: transform;
+}
+
+.scene-bridge path {
+  fill: var(--bridge-color);
+}
+
+.scene-bridge__hairline {
+  fill: none !important;
+  stroke: var(--bridge-line, rgba(255,255,255,.18));
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+  opacity: .58;
+}
+
+.scene-bridge--top svg {
+  transform: scaleY(-1);
+  transform-origin: center;
+}
+
+/* The seam itself now owns each color hand-off. */
+.hero::before {
+  background: linear-gradient(90deg, rgba(243,239,230,.98) 0%, rgba(243,239,230,.96) 42%, rgba(243,239,230,.15) 74%, rgba(243,239,230,0) 100%);
+}
+.scan__media::after {
+  background: linear-gradient(90deg, rgba(17,18,22,.9) 0%, rgba(17,18,22,.28) 47%, rgba(17,18,22,.08) 100%);
+}
+.thesis {
+  background: #ead7dc;
+}
+.ritual {
+  background: #f3efe6;
+}
+.room {
+  background: #15161a;
+}
+.room__image::after {
+  background: linear-gradient(90deg, rgba(21,22,26,.82), rgba(21,22,26,.08) 55%, rgba(21,22,26,.22));
+}
+.questions {
+  background: #ead7dc;
+}
+
+@media (max-width: 900px) {
+  .scene-bridge {
+    height: clamp(82px, 25vw, 126px);
+  }
+
+  .hero::before {
+    background: linear-gradient(180deg, rgba(243,239,230,.98), rgba(243,239,230,.92));
+  }
+
+  .scan__media::after {
+    background: linear-gradient(180deg, rgba(17,18,22,.52), rgba(17,18,22,.12) 48%, rgba(17,18,22,.76));
+  }
+
+  .room__caption {
+    background: #15161a;
+  }
+
+  /* Leave a calm zone around the seam so text never fights the transition. */
+  .hero { padding-bottom: 166px; }
+  .scan__copy { bottom: 176px; }
+  .scan__readout { bottom: 112px; }
+  .thesis { padding-bottom: 176px; }
+  .ritual { padding-bottom: 176px; }
+  .room__caption { padding-bottom: 184px; }
+  .questions { padding-bottom: 176px; }
+}
+
+@media (max-width: 390px) {
+  .scene-bridge { height: 88px; }
+  .hero { padding-bottom: 148px; }
+  .scan__copy { bottom: 166px; }
+  .scan__readout { bottom: 106px; }
+  .thesis,
+  .ritual,
+  .questions { padding-bottom: 154px; }
+  .room__caption { padding-bottom: 164px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-bridge svg { transform: none !important; }
+  .scene-bridge--top svg { transform: scaleY(-1) !important; }
+}
