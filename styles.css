@@ -350,7 +350,7 @@ main { position: relative; z-index: 2; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, #f3efe6 0%, rgba(243,239,230,.48) 6%, rgba(17,18,22,0) 18%, rgba(17,18,22,0) 82%, rgba(234,215,220,.56) 94%, #ead7dc 100%),
+    linear-gradient(180deg, #111216 0%, rgba(17,18,22,.66) 7%, rgba(17,18,22,0) 18%, rgba(17,18,22,0) 82%, rgba(234,215,220,.56) 94%, #ead7dc 100%),
     linear-gradient(90deg, rgba(17,18,22,.9) 0%, rgba(17,18,22,.28) 47%, rgba(17,18,22,.08) 100%);
   pointer-events: none;
 }
@@ -802,7 +802,7 @@ main { position: relative; z-index: 2; }
   .scan__media { --x: 66%; --y: 43%; --r: 22vw; }
   .scan__media::after {
     background:
-      linear-gradient(180deg, #f3efe6 0%, rgba(243,239,230,.34) 8%, rgba(17,18,22,0) 23%, rgba(17,18,22,0) 76%, rgba(234,215,220,.5) 91%, #ead7dc 100%),
+      linear-gradient(180deg, #111216 0%, rgba(17,18,22,.62) 9%, rgba(17,18,22,0) 23%, rgba(17,18,22,0) 76%, rgba(234,215,220,.5) 91%, #ead7dc 100%),
       linear-gradient(180deg, rgba(17,18,22,.52), rgba(17,18,22,.12) 48%, rgba(17,18,22,.76));
   }
   .scan__copy { position: absolute; top: auto; left: 18px; right: 18px; bottom: 12vh; margin: 0; padding: 0; width: auto; }
