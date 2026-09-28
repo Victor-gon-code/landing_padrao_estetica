@@ -448,6 +448,96 @@
   render();
 
   /* ------------------------------------------------------------------------
+     Horizontal protocols — native sticky stage, no pin wrappers
+     ------------------------------------------------------------------------ */
+
+  const protocols = qs('.protocols');
+  const protocolPin = qs('.protocols__pin');
+  const protocolTrack = qs('.protocol-track');
+  const horizontalProtocolsQuery = matchMedia('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+
+  let protocolState = {
+    active: false,
+    top: 0,
+    distance: 0,
+    viewportHeight: innerHeight
+  };
+  let protocolScrollTick = 0;
+  let protocolMeasureTick = 0;
+
+  function updateProtocolPosition() {
+    protocolScrollTick = 0;
+    if (!protocolState.active || !protocols || !protocolPin || !protocolTrack) return;
+
+    const max = Math.max(1, protocolState.distance);
+    const progress = Math.max(0, Math.min(1, (scrollY - protocolState.top) / max));
+    const x = -protocolState.distance * progress;
+
+    protocolTrack.style.transform = `translate3d(${x}px,0,0)`;
+    protocolPin.style.setProperty('--rail', `${progress * 200 - 100}%`);
+  }
+
+  function measureProtocols() {
+    protocolMeasureTick = 0;
+    if (!protocols || !protocolPin || !protocolTrack) return;
+
+    const active = horizontalProtocolsQuery.matches;
+
+    if (!active) {
+      protocolState = { active: false, top: 0, distance: 0, viewportHeight: innerHeight };
+      protocols.style.removeProperty('height');
+      protocolTrack.style.removeProperty('transform');
+      protocolPin.style.removeProperty('--rail');
+      return;
+    }
+
+    const viewportWidth = document.documentElement.clientWidth;
+    const viewportHeight = window.visualViewport?.height || innerHeight;
+    const distance = Math.max(0, protocolTrack.scrollWidth - viewportWidth);
+
+    protocols.style.height = `${Math.ceil(viewportHeight + distance)}px`;
+
+    const top = protocols.getBoundingClientRect().top + scrollY;
+    protocolState = {
+      active: true,
+      top,
+      distance,
+      viewportHeight
+    };
+
+    updateProtocolPosition();
+
+    if (window.ScrollTrigger) {
+      requestAnimationFrame(() => ScrollTrigger.refresh(true));
+    }
+  }
+
+  function queueProtocolMeasure() {
+    if (protocolMeasureTick) return;
+    protocolMeasureTick = requestAnimationFrame(measureProtocols);
+  }
+
+  function queueProtocolScroll() {
+    if (protocolScrollTick || !protocolState.active) return;
+    protocolScrollTick = requestAnimationFrame(updateProtocolPosition);
+  }
+
+  addEventListener('scroll', queueProtocolScroll, { passive: true });
+  addEventListener('resize', queueProtocolMeasure, { passive: true });
+  addEventListener('orientationchange', () => setTimeout(queueProtocolMeasure, 120), { passive: true });
+  addEventListener('pageshow', queueProtocolMeasure);
+
+  horizontalProtocolsQuery.addEventListener?.('change', queueProtocolMeasure);
+  window.visualViewport?.addEventListener('resize', queueProtocolMeasure, { passive: true });
+
+  if ('ResizeObserver' in window && protocolTrack) {
+    const protocolObserver = new ResizeObserver(queueProtocolMeasure);
+    protocolObserver.observe(protocolTrack);
+  }
+
+  queueProtocolMeasure();
+
+  /* ------------------------------------------------------------------------
      Scroll choreography
      ------------------------------------------------------------------------ */
 
@@ -549,33 +639,6 @@
           ease: 'none',
           scrollTrigger: { trigger: '.thesis', start: 'top bottom', end: 'bottom top', scrub: 1 }
         });
-
-        const track = qs('.protocol-track');
-        const pin = qs('.protocols__pin');
-
-        if (track && pin) {
-          const distance = () => Math.max(0, track.scrollWidth - innerWidth);
-
-          const horizontalTween = gsap.to(track, {
-            x: () => -distance(),
-            ease: 'none',
-            scrollTrigger: {
-              trigger: pin,
-              start: 'top top',
-              end: () => `+=${distance()}`,
-              scrub: .85,
-              pin: true,
-              pinSpacing: true,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-              onUpdate: self => {
-                pin.style.setProperty('--rail', `${self.progress * 200 - 100}%`);
-              }
-            }
-          });
-
-          horizontalTween.scrollTrigger?.refresh();
-        }
 
         qsa('.ritual__steps article').forEach(article => {
           gsap.fromTo(article,
@@ -689,7 +752,11 @@
       });
     });
 
-    const refresh = () => requestAnimationFrame(() => ScrollTrigger.refresh());
+    const refresh = () => requestAnimationFrame(() => {
+      measureProtocols();
+      ScrollTrigger.refresh(true);
+      updateProtocolPosition();
+    });
 
     addEventListener('load', refresh, { once: true });
 
