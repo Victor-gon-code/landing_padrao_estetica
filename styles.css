@@ -512,7 +512,7 @@ body.map-open .site-map { transform: translateY(0); }
   background: var(--dark);
   color: var(--light);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   overflow: hidden;
 }
 
@@ -598,7 +598,7 @@ body.map-open .site-map { transform: translateY(0); }
   position: relative;
   z-index: 4;
   width: min(570px, 42vw);
-  margin-top: -4vh;
+  margin-top: clamp(18px, 3vh, 32px);
 }
 
 .scan__copy h2 {
