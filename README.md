@@ -51,3 +51,15 @@ python -m http.server 8000
 Depois acesse `http://localhost:8000`.
 
 > Para ver WebGL e os recursos remotos corretamente, teste com conexão à internet.
+
+
+## Revisão de acabamento
+A revisão atual reduziu sobreposições acidentais no hero e nos painéis de procedimentos, reorganizou o mobile para que imagem e texto tenham respiro próprio, corrigiu triggers de animação, suavizou a paleta e adicionou fallback para ausência de GSAP/WebGL.
+
+As áreas de procedimento agora deixam claro o que é **foto demonstrativa** e onde deve entrar **fotografia real do cliente**.
+
+### Referências de imagem demonstrativa adicionadas
+- Facial treatment — Unsplash, Karelys Ruiz: https://unsplash.com/photos/woman-receiving-facial-skincare-treatment-PqyzuzFiQfY
+- Facial mask application — Unsplash, Ernesto Samaniego: https://unsplash.com/photos/woman-applies-a-clear-textured-mask-to-another-womans-face-o9qR56aa9hw
+
+Essas imagens estão apenas na demo. Em produção, substituir por fotos autorizadas do atendimento real sempre que possível.
