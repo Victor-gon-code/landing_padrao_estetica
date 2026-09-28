@@ -448,134 +448,90 @@
   render();
 
   /* ------------------------------------------------------------------------
-     Stable desktop procedure stage
+     Native horizontal protocol scroll
+     Vertical wheel/trackpad movement is converted into horizontal movement
+     while the sticky stage stays fixed in the viewport.
      ------------------------------------------------------------------------ */
 
   const protocols = qs('.protocols');
   const protocolPin = qs('.protocols__pin');
-  const protocolPanels = protocols ? qsa('.protocol-panel', protocols) : [];
-  const protocolStageQuery = matchMedia('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+  const protocolTrack = qs('.protocol-track');
+  const protocolQuery = matchMedia('(min-width: 901px) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 
-  let protocolStage = {
-    active: false,
+  let protocolState = {
+    enabled: false,
     top: 0,
-    step: 0,
-    travel: 0,
-    segments: Math.max(0, protocolPanels.length - 1)
+    distance: 0
   };
-  let protocolRaf = 0;
+  let protocolScrollRaf = 0;
   let protocolMeasureRaf = 0;
 
-  const clamp01 = value => Math.max(0, Math.min(1, value));
-  const smooth = value => {
-    const t = clamp01(value);
-    return t * t * (3 - 2 * t);
-  };
-
-  function resetProtocolStage() {
-    protocols?.classList.remove('protocols--stage');
-    protocols?.style.removeProperty('--protocol-stage-height');
+  function clearHorizontalProtocols() {
+    protocolState = { enabled: false, top: 0, distance: 0 };
+    protocols?.classList.remove('is-horizontal');
+    protocols?.style.removeProperty('--protocol-scroll-height');
+    protocolTrack?.style.removeProperty('transform');
     protocolPin?.style.removeProperty('--rail');
-
-    protocolPanels.forEach(panel => {
-      panel.style.removeProperty('visibility');
-      panel.style.removeProperty('pointer-events');
-      panel.style.removeProperty('clip-path');
-      panel.style.removeProperty('z-index');
-    });
   }
 
-  function drawProtocolStage() {
-    protocolRaf = 0;
-    if (!protocolStage.active || !protocolPin || !protocolPanels.length) return;
+  function paintHorizontalProtocols() {
+    protocolScrollRaf = 0;
+    if (!protocolState.enabled || !protocolTrack || !protocolPin) return;
 
-    const local = Math.max(0, Math.min(protocolStage.travel, scrollY - protocolStage.top));
-    const raw = protocolStage.step > 0 ? local / protocolStage.step : 0;
-    const base = Math.min(protocolStage.segments, Math.floor(raw));
-    const fraction = base >= protocolStage.segments ? 0 : raw - base;
-    const reveal = base >= protocolStage.segments ? 0 : smooth((fraction - .48) / .48);
-    const totalProgress = protocolStage.travel > 0 ? local / protocolStage.travel : 0;
+    const progress = protocolState.distance > 0
+      ? Math.max(0, Math.min(1, (scrollY - protocolState.top) / protocolState.distance))
+      : 0;
 
-    protocolPin.style.setProperty('--rail', `${totalProgress * 200 - 100}%`);
-
-    protocolPanels.forEach((panel, index) => {
-      if (index === base) {
-        panel.style.visibility = 'visible';
-        panel.style.pointerEvents = reveal < .98 ? 'auto' : 'none';
-        panel.style.clipPath = 'inset(0 0 0 0)';
-        panel.style.zIndex = '1';
-        return;
-      }
-
-      if (base < protocolStage.segments && index === base + 1) {
-        panel.style.visibility = reveal > .001 ? 'visible' : 'hidden';
-        panel.style.pointerEvents = reveal > .98 ? 'auto' : 'none';
-        panel.style.clipPath = `inset(0 0 0 ${(1 - reveal) * 100}%)`;
-        panel.style.zIndex = '2';
-        return;
-      }
-
-      panel.style.visibility = 'hidden';
-      panel.style.pointerEvents = 'none';
-      panel.style.clipPath = 'inset(0 0 0 100%)';
-      panel.style.zIndex = '0';
-    });
+    const x = -protocolState.distance * progress;
+    protocolTrack.style.transform = `translate3d(${x}px,0,0)`;
+    protocolPin.style.setProperty('--rail', `${progress * 200 - 100}%`);
   }
 
-  function measureProtocolStage() {
+  function measureHorizontalProtocols() {
     protocolMeasureRaf = 0;
-    if (!protocols || !protocolPin || !protocolPanels.length) return;
+    if (!protocols || !protocolTrack || !protocolPin) return;
 
-    if (!protocolStageQuery.matches) {
-      protocolStage = {
-        active: false,
-        top: 0,
-        step: 0,
-        travel: 0,
-        segments: Math.max(0, protocolPanels.length - 1)
-      };
-      resetProtocolStage();
+    if (!protocolQuery.matches) {
+      clearHorizontalProtocols();
       return;
     }
 
-    protocols.classList.add('protocols--stage');
+    protocols.classList.add('is-horizontal');
 
+    // Read after the horizontal class is active.
+    const viewportWidth = document.documentElement.clientWidth;
     const viewportHeight = window.visualViewport?.height || innerHeight;
-    const segments = Math.max(0, protocolPanels.length - 1);
-    const step = Math.max(520, viewportHeight * .9);
-    const travel = step * segments;
+    const distance = Math.max(0, protocolTrack.scrollWidth - viewportWidth);
 
-    protocols.style.setProperty('--protocol-stage-height', `${Math.ceil(viewportHeight + travel)}px`);
+    protocols.style.setProperty('--protocol-scroll-height', `${Math.ceil(viewportHeight + distance)}px`);
 
-    protocolStage = {
-      active: true,
+    protocolState = {
+      enabled: distance > 0,
       top: protocols.getBoundingClientRect().top + scrollY,
-      step,
-      travel,
-      segments
+      distance
     };
 
-    drawProtocolStage();
+    paintHorizontalProtocols();
   }
 
-  function queueProtocolStage() {
-    if (protocolRaf || !protocolStage.active) return;
-    protocolRaf = requestAnimationFrame(drawProtocolStage);
+  function queueHorizontalPaint() {
+    if (!protocolState.enabled || protocolScrollRaf) return;
+    protocolScrollRaf = requestAnimationFrame(paintHorizontalProtocols);
   }
 
-  function queueProtocolMeasure() {
+  function queueHorizontalMeasure() {
     if (protocolMeasureRaf) return;
-    protocolMeasureRaf = requestAnimationFrame(measureProtocolStage);
+    protocolMeasureRaf = requestAnimationFrame(measureHorizontalProtocols);
   }
 
-  addEventListener('scroll', queueProtocolStage, { passive: true });
-  addEventListener('resize', queueProtocolMeasure, { passive: true });
-  addEventListener('orientationchange', () => setTimeout(queueProtocolMeasure, 120), { passive: true });
-  addEventListener('pageshow', queueProtocolMeasure);
-  protocolStageQuery.addEventListener?.('change', queueProtocolMeasure);
-  window.visualViewport?.addEventListener('resize', queueProtocolMeasure, { passive: true });
+  addEventListener('scroll', queueHorizontalPaint, { passive: true });
+  addEventListener('resize', queueHorizontalMeasure, { passive: true });
+  addEventListener('orientationchange', () => setTimeout(queueHorizontalMeasure, 120), { passive: true });
+  addEventListener('pageshow', queueHorizontalMeasure);
+  protocolQuery.addEventListener?.('change', queueHorizontalMeasure);
+  window.visualViewport?.addEventListener('resize', queueHorizontalMeasure, { passive: true });
 
-  measureProtocolStage();
+  measureHorizontalProtocols();
 
   /* ------------------------------------------------------------------------
      Scroll choreography
@@ -793,9 +749,9 @@
     });
 
     const refresh = () => requestAnimationFrame(() => {
-      measureProtocolStage();
+      measureHorizontalProtocols();
       ScrollTrigger.refresh(true);
-      drawProtocolStage();
+      paintHorizontalProtocols();
     });
 
     addEventListener('load', refresh, { once: true });
