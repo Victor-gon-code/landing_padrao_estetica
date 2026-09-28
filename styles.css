@@ -12,7 +12,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 body {
   margin: 0;
   background: var(--paper);
@@ -522,7 +522,7 @@ main { position: relative; z-index: 2; }
   letter-spacing: -.07em;
 }
 .protocol-panel__text > p:last-child { width: min(330px, 90%); font-size: 12px; line-height: 1.6; }
-.protocol-panel--structure { background: #a8bdff; color: #14151a; }
+.protocol-panel--structure { background: #aab9e7; color: #14151a; }
 .procedure-slot {
   position: absolute;
   right: 8vw;
@@ -630,7 +630,13 @@ main { position: relative; z-index: 2; }
 }
 .ritual__steps p { margin: .2em 0 0; font-size: 13px; line-height: 1.65; max-width: 290px; }
 
-.room { min-height: 125svh; background: #15161a; color: #f4efe8; overflow: hidden; }
+.room {
+  min-height: 125svh;
+  background:
+    linear-gradient(180deg, #15161a 0%, #15161a 84%, rgba(234,215,220,.82) 96%, #ead7dc 100%);
+  color: #f4efe8;
+  overflow: hidden;
+}
 .room__image { position: absolute; inset: 0; overflow: hidden; }
 .room__image img { filter: saturate(.72) contrast(1.03) brightness(.74); transform: scale(1.04); }
 .room__image::after { content:""; position:absolute; inset:0; background:
