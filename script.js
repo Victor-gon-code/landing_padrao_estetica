@@ -100,10 +100,31 @@
   const mapClose = qs('.map-close');
   const siteMap = qs('.site-map');
   function setMap(open) {
-    document.body.classList.toggle('map-open', open);
-    mapToggle.setAttribute('aria-expanded', String(open));
-    siteMap.setAttribute('aria-hidden', String(!open));
-    if (!open && scrollY < 84) qs('.chrome')?.classList.remove('is-hidden');
+    if (!siteMap || !mapToggle) return;
+
+    if (open) {
+      siteMap.inert = false;
+      siteMap.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('map-open');
+      mapToggle.setAttribute('aria-expanded', 'true');
+
+      requestAnimationFrame(() => {
+        mapClose?.focus({ preventScroll: true });
+      });
+      return;
+    }
+
+    // Move focus out before the menu becomes hidden/inert.
+    if (siteMap.contains(document.activeElement)) {
+      mapToggle.focus({ preventScroll: true });
+    }
+
+    document.body.classList.remove('map-open');
+    mapToggle.setAttribute('aria-expanded', 'false');
+    siteMap.setAttribute('aria-hidden', 'true');
+    siteMap.inert = true;
+
+    if (scrollY < 84) qs('.chrome')?.classList.remove('is-hidden');
   }
   mapToggle?.addEventListener('click', () => setMap(!document.body.classList.contains('map-open')));
   mapClose?.addEventListener('click', () => setMap(false));
