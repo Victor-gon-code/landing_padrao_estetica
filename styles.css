@@ -1667,11 +1667,11 @@ body.no-motion-lib .protocols__rail { display: none; }
 @media (min-width: 901px) {
   .hero__thought,
   .hero__start {
-    bottom: clamp(118px, 13vh, 158px);
+    bottom: clamp(142px, 15vh, 178px);
   }
 
   .scan__readout {
-    bottom: clamp(116px, 12vh, 150px);
+    bottom: clamp(142px, 15vh, 178px);
   }
 
   .thesis {
@@ -1683,7 +1683,7 @@ body.no-motion-lib .protocols__rail { display: none; }
   }
 
   .room__coord {
-    bottom: clamp(118px, 12vh, 152px);
+    bottom: clamp(142px, 15vh, 178px);
   }
 
   .questions {
