@@ -315,7 +315,9 @@ function initWebGL() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.15 : 1.55));
   renderer.setSize(innerWidth, innerHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  let webglActive = true;
   canvas.addEventListener('webglcontextlost', () => {
+    webglActive = false;
     document.body.classList.add('no-webgl');
   }, { once: true });
 
@@ -471,6 +473,7 @@ function initWebGL() {
   updateViewportTuning();
 
   function animate() {
+    if (!webglActive) return;
     const t = clock.getElapsedTime();
     frame += 1;
 
