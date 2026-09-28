@@ -13,7 +13,7 @@
   --pad:clamp(20px,4vw,64px);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;background:var(--paper);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{scroll-behavior:smooth;background:var(--paper);scrollbar-gutter:stable;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;font-family:var(--sans);background:var(--paper);color:var(--ink);overflow-x:hidden;cursor:default}
 body.menu-open{overflow:hidden}
 a{color:inherit;text-decoration:none}
