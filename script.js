@@ -8,6 +8,13 @@ const preloadBar = $('.preloader__track i');
 const preloadNumber = $('.preloader__meta b');
 
 function boot() {
+  if (reduced) {
+    if (preloadBar) preloadBar.style.width = '100%';
+    if (preloadNumber) preloadNumber.textContent = '100';
+    preloader?.classList.add('is-done');
+    return;
+  }
+
   let p = 0;
   const tick = () => {
     p += Math.max(2, (100 - p) * 0.18);
@@ -293,15 +300,24 @@ function initWebGL() {
   const canvas = $('#webgl');
   if (!canvas) return;
 
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: !coarse,
-    powerPreference: 'high-performance'
-  });
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: !coarse,
+      powerPreference: 'high-performance'
+    });
+  } catch {
+    document.body.classList.add('no-webgl');
+    return;
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.15 : 1.55));
   renderer.setSize(innerWidth, innerHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  canvas.addEventListener('webglcontextlost', () => {
+    document.body.classList.add('no-webgl');
+  }, { once: true });
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(31, innerWidth / innerHeight, .1, 100);
@@ -345,19 +361,25 @@ function initWebGL() {
     geometry.setIndex(indices);
     geometry.computeVertexNormals();
 
-    const material = new THREE.MeshPhysicalMaterial({
+    const sharedMaterial = {
       color: new THREE.Color(color),
       side: THREE.DoubleSide,
       transparent: true,
       opacity,
-      roughness: .54,
+      roughness: coarse ? .66 : .54,
       metalness: 0,
-      transmission: .08,
-      thickness: .65,
-      clearcoat: .16,
-      clearcoatRoughness: .72,
       depthWrite: false
-    });
+    };
+
+    const material = coarse
+      ? new THREE.MeshStandardMaterial(sharedMaterial)
+      : new THREE.MeshPhysicalMaterial({
+          ...sharedMaterial,
+          transmission: .08,
+          thickness: .65,
+          clearcoat: .16,
+          clearcoatRoughness: .72
+        });
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.userData = {
