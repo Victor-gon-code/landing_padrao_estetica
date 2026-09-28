@@ -392,6 +392,8 @@ body.map-open .site-map { transform: translateY(0); }
 
 .hero__type {
   grid-column: 1;
+  margin: 0;
+  font: inherit;
   grid-row: 2;
   align-self: center;
   position: relative;
@@ -498,8 +500,6 @@ body.map-open .site-map { transform: translateY(0); }
   font: 400 20px/1 var(--sans);
   animation: bob .9s ease-in-out infinite alternate;
 }
-
-.hero__axis { display: none; }
 
 /* ---------- scan ---------- */
 
@@ -672,6 +672,8 @@ body.map-open .site-map { transform: translateY(0); }
 
 .thesis__words {
   position: relative;
+  margin: 0;
+  font: inherit;
   z-index: 2;
   width: 100%;
 }
@@ -880,22 +882,6 @@ body.map-open .site-map { transform: translateY(0); }
 
 .protocol-panel figure:hover img {
   transform: scale(1.025);
-}
-
-.procedure-photo figcaption {
-  position: absolute;
-  z-index: 3;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  width: max-content;
-  max-width: calc(100% - 24px);
-  padding: 9px 11px;
-  background: rgba(17,18,22,.82);
-  color: var(--light);
-  font: 300 8px/1.35 var(--mono);
-  text-transform: uppercase;
-  letter-spacing: .08em;
 }
 
 .protocol-panel__text {
