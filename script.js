@@ -2,13 +2,15 @@
   const qs = (selector, root = document) => root.querySelector(selector);
   const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = matchMedia('(pointer:fine)').matches;
+  const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointerQuery = matchMedia('(pointer: fine)');
   const mobileQuery = matchMedia('(max-width: 900px)');
-  const lowPower =
-    mobileQuery.matches ||
+  const hardwareLowPower =
     (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
     (navigator.deviceMemory && navigator.deviceMemory <= 4);
+
+  const prefersReducedMotion = () => motionQuery.matches;
+  const isLowPower = () => mobileQuery.matches || Boolean(hardwareLowPower);
 
   /* ------------------------------------------------------------------------
      Flow-safe chapter transitions
@@ -84,22 +86,23 @@
   let bootFinished = false;
   let progress = 0;
 
-  const loaderTimer = setInterval(() => {
+  const loaderTimer = boot ? setInterval(() => {
     progress = Math.min(progress + Math.max(2, Math.random() * 9), 94);
     if (bootBar) bootBar.style.width = `${progress}%`;
     if (bootNumber) bootNumber.textContent = String(Math.round(progress)).padStart(2, '0');
-  }, 85);
+  }, 85) : 0;
 
   function finishBoot() {
-    if (bootFinished || !boot) return;
+    if (bootFinished) return;
     bootFinished = true;
-    clearInterval(loaderTimer);
+    if (loaderTimer) clearInterval(loaderTimer);
+    if (!boot) return;
 
     if (bootBar) bootBar.style.width = '100%';
     if (bootNumber) bootNumber.textContent = '100';
 
     setTimeout(() => {
-      if (window.gsap && !reduceMotion) {
+      if (window.gsap && !prefersReducedMotion()) {
         gsap.to(boot, {
           yPercent: -100,
           duration: .82,
@@ -190,20 +193,40 @@
      ------------------------------------------------------------------------ */
 
   const sceneName = qs('#scene-name');
-  const sceneObserver = new IntersectionObserver(entries => {
-    const active = entries
-      .filter(entry => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+  const sceneSections = qsa('.scene');
+  const sceneVisibility = new Map(sceneSections.map(section => [section, 0]));
+  let activeScene = sceneSections[0] || null;
 
-    if (!active) return;
-    if (sceneName) sceneName.textContent = active.target.dataset.scene || '';
-    setOrbState(active.target);
+  function applyActiveScene() {
+    let bestScene = activeScene;
+    let bestRatio = -1;
+
+    sceneVisibility.forEach((ratio, section) => {
+      if (ratio > bestRatio) {
+        bestRatio = ratio;
+        bestScene = section;
+      }
+    });
+
+    if (!bestScene || bestRatio <= 0) return;
+    if (bestScene === activeScene && sceneName?.textContent === (bestScene.dataset.scene || '')) return;
+
+    activeScene = bestScene;
+    if (sceneName) sceneName.textContent = bestScene.dataset.scene || '';
+    setOrbState(bestScene);
+  }
+
+  const sceneObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      sceneVisibility.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+    });
+    applyActiveScene();
   }, {
-    threshold: [.2, .45, .7],
+    threshold: [0, .2, .45, .7],
     rootMargin: '-16% 0px -30% 0px'
   });
 
-  qsa('.scene').forEach(section => sceneObserver.observe(section));
+  sceneSections.forEach(section => sceneObserver.observe(section));
 
   /* ------------------------------------------------------------------------
      Scan lens
@@ -212,7 +235,7 @@
   const scan = qs('.scan');
   const scanMedia = qs('#scan-media');
 
-  if (scan && scanMedia && finePointer && !reduceMotion) {
+  if (scan && scanMedia) {
     let targetX = 66;
     let targetY = 52;
     let currentX = targetX;
@@ -220,6 +243,8 @@
     let lensFrame = 0;
 
     scanMedia.addEventListener('pointermove', event => {
+      if (!finePointerQuery.matches || prefersReducedMotion()) return;
+
       const rect = scanMedia.getBoundingClientRect();
       targetX = Math.max(16, Math.min(88, ((event.clientX - rect.left) / rect.width) * 100));
       targetY = Math.max(16, Math.min(84, ((event.clientY - rect.top) / rect.height) * 100));
@@ -253,11 +278,12 @@
   let mesh;
   let material;
   let webglReady = false;
-  let renderEnabled = true;
   let pointerX = 0;
   let pointerY = 0;
   let targetPointerX = 0;
   let targetPointerY = 0;
+  let renderFrame = 0;
+  let lastFrame = 0;
 
   const canvas = qs('#skin-canvas');
 
@@ -322,11 +348,11 @@
     renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
-      antialias: !lowPower,
-      powerPreference: lowPower ? 'low-power' : 'high-performance'
+      antialias: !isLowPower(),
+      powerPreference: isLowPower() ? 'low-power' : 'high-performance'
     });
 
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lowPower ? 1.15 : 1.6));
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, isLowPower() ? 1.15 : 1.6));
     renderer.setSize(innerWidth, innerHeight, false);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -336,7 +362,7 @@
 
     const geometry = new THREE.IcosahedronGeometry(
       mobileQuery.matches ? 1.18 : 1.48,
-      lowPower ? 3 : 5
+      isLowPower() ? 3 : 5
     );
 
     material = new THREE.ShaderMaterial({
@@ -363,10 +389,22 @@
 
   function resizeWebGL() {
     if (!renderer || !camera) return;
-    camera.aspect = innerWidth / innerHeight;
+    const width = Math.max(1, document.documentElement.clientWidth);
+    const height = Math.max(1, innerHeight);
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, lowPower ? 1.15 : 1.6));
-    renderer.setSize(innerWidth, innerHeight, false);
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, isLowPower() ? 1.15 : 1.6));
+    renderer.setSize(width, height, false);
+  }
+
+  function rebuildWebGLGeometry() {
+    if (!mesh || !window.THREE) return;
+    const next = new THREE.IcosahedronGeometry(
+      mobileQuery.matches ? 1.18 : 1.48,
+      isLowPower() ? 3 : 5
+    );
+    mesh.geometry?.dispose?.();
+    mesh.geometry = next;
   }
 
   function setOrbState(section, immediate = false) {
@@ -377,7 +415,7 @@
     const x = Number(section.dataset.orbX || 0) * (mobile ? .54 : 1.4);
     const y = Number(section.dataset.orbY || 0) * (mobile ? .66 : 1);
     const scale = Number(section.dataset.orbScale || 1) * (mobile ? .76 : .96);
-    const duration = immediate || reduceMotion ? 0 : .95;
+    const duration = immediate || prefersReducedMotion() ? 0 : .95;
 
     if (window.gsap) {
       gsap.to(mesh.position, { x, y, duration, ease: 'power2.out', overwrite: true });
@@ -407,45 +445,64 @@
     console.warn('WebGL fallback active:', error);
   }
 
-  addEventListener('resize', resizeWebGL, { passive: true });
-
-  if (finePointer) {
-    addEventListener('pointermove', event => {
-      if (!webglReady || reduceMotion) return;
-      targetPointerX = (event.clientX / innerWidth - .5) * .28;
-      targetPointerY = (event.clientY / innerHeight - .5) * .18;
-    }, { passive: true });
+  function startRenderLoop() {
+    if (!webglReady || document.hidden || renderFrame) return;
+    renderFrame = requestAnimationFrame(render);
   }
 
-  document.addEventListener('visibilitychange', () => {
-    renderEnabled = !document.hidden;
-  });
-
-  let lastFrame = 0;
+  function stopRenderLoop() {
+    if (!renderFrame) return;
+    cancelAnimationFrame(renderFrame);
+    renderFrame = 0;
+  }
 
   function render(now = 0) {
-    requestAnimationFrame(render);
-    if (!webglReady || !renderEnabled) return;
+    renderFrame = 0;
+    if (!webglReady || document.hidden) return;
 
-    const frameBudget = lowPower ? 34 : (reduceMotion ? 100 : 22);
-    if (now - lastFrame < frameBudget) return;
-    lastFrame = now;
+    const frameBudget = isLowPower() ? 34 : (prefersReducedMotion() ? 100 : 22);
+    if (now - lastFrame >= frameBudget) {
+      lastFrame = now;
 
-    pointerX += (targetPointerX - pointerX) * .045;
-    pointerY += (targetPointerY - pointerY) * .045;
+      pointerX += (targetPointerX - pointerX) * .05;
+      pointerY += (targetPointerY - pointerY) * .05;
 
-    if (!reduceMotion) {
-      material.uniforms.uTime.value = now * .001;
-      mesh.rotation.y += .0012;
+      if (!prefersReducedMotion()) {
+        material.uniforms.uTime.value = now * .001;
+        mesh.rotation.y += .0012;
+      }
+
+      const targetRotX = .35 + pointerY;
+      const targetRotZ = -.12 + pointerX;
+      mesh.rotation.x += (targetRotX - mesh.rotation.x) * .045;
+      mesh.rotation.z += (targetRotZ - mesh.rotation.z) * .045;
+
+      renderer.render(scene, camera);
     }
 
-    mesh.rotation.x += (pointerY - mesh.rotation.x * .02) * .003;
-    mesh.rotation.z += (pointerX - mesh.rotation.z * .02) * .003;
-
-    renderer.render(scene, camera);
+    startRenderLoop();
   }
 
-  render();
+  addEventListener('resize', resizeWebGL, { passive: true });
+
+  addEventListener('pointermove', event => {
+    if (!webglReady || !finePointerQuery.matches || prefersReducedMotion()) return;
+    targetPointerX = (event.clientX / Math.max(1, innerWidth) - .5) * .18;
+    targetPointerY = (event.clientY / Math.max(1, innerHeight) - .5) * .12;
+  }, { passive: true });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopRenderLoop();
+    else startRenderLoop();
+  });
+
+  mobileQuery.addEventListener?.('change', () => {
+    rebuildWebGLGeometry();
+    resizeWebGL();
+    if (activeScene) setOrbState(activeScene, true);
+  });
+
+  startRenderLoop();
 
   /* ------------------------------------------------------------------------
      Native horizontal protocol scroll
@@ -498,20 +555,22 @@
 
     protocols.classList.add('is-horizontal');
 
-    // Read after the horizontal class is active.
-    const viewportWidth = document.documentElement.clientWidth;
-    const viewportHeight = window.visualViewport?.height || innerHeight;
+    // Read after the horizontal class is active. Measuring the actual sticky
+    // viewport avoids 100vw/scrollbar rounding errors at panel boundaries.
+    const viewportWidth = Math.max(1, protocolPin.clientWidth);
+    const viewportHeight = Math.max(1, protocolPin.clientHeight || innerHeight);
     const distance = Math.max(0, protocolTrack.scrollWidth - viewportWidth);
 
     protocols.style.setProperty('--protocol-scroll-height', `${Math.ceil(viewportHeight + distance)}px`);
 
     protocolState = {
-      enabled: distance > 0,
+      enabled: distance > 1,
       top: protocols.getBoundingClientRect().top + scrollY,
       distance
     };
 
-    paintHorizontalProtocols();
+    if (protocolState.enabled) paintHorizontalProtocols();
+    else clearHorizontalProtocols();
   }
 
   function queueHorizontalPaint() {
@@ -531,26 +590,33 @@
   protocolQuery.addEventListener?.('change', queueHorizontalMeasure);
   window.visualViewport?.addEventListener('resize', queueHorizontalMeasure, { passive: true });
 
+  if ('ResizeObserver' in window && protocolPin && protocolTrack) {
+    const protocolObserver = new ResizeObserver(() => queueHorizontalMeasure());
+    protocolObserver.observe(protocolPin);
+    protocolObserver.observe(protocolTrack);
+  }
+
   measureHorizontalProtocols();
 
   /* ------------------------------------------------------------------------
      Scroll choreography
      ------------------------------------------------------------------------ */
 
-  if (!window.gsap || !window.ScrollTrigger) {
+  if (!window.gsap || !window.ScrollTrigger || typeof gsap.registerPlugin !== 'function') {
     document.body.classList.add('no-motion-lib');
   } else {
+    document.body.classList.remove('no-motion-lib');
     gsap.registerPlugin(ScrollTrigger);
     const mm = gsap.matchMedia();
 
-    if (!reduceMotion) {
+    if (!prefersReducedMotion()) {
       gsap.from('.hero__line span', {
-        yPercent: 108,
-        rotate: 1.2,
-        duration: 1.05,
-        stagger: .09,
-        ease: 'power4.out',
-        delay: .35
+        opacity: 0,
+        y: 28,
+        duration: .9,
+        stagger: .08,
+        ease: 'power3.out',
+        delay: .32
       });
 
       gsap.from('.hero__portrait', {
@@ -617,7 +683,7 @@
     });
 
     mm.add('(min-width: 901px)', () => {
-      if (!reduceMotion) {
+      if (!prefersReducedMotion()) {
         gsap.to('.thesis-word--a', {
           xPercent: 5,
           ease: 'none',
@@ -638,7 +704,7 @@
 
         qsa('.ritual__steps article').forEach(article => {
           gsap.fromTo(article,
-            { opacity: .36, y: 24 },
+            { opacity: .76, y: 14 },
             {
               opacity: 1,
               y: 0,
@@ -695,7 +761,7 @@
     });
 
     mm.add('(max-width: 900px)', () => {
-      if (reduceMotion) return;
+      if (prefersReducedMotion()) return;
 
       if (scan) {
         gsap.fromTo(scan,
@@ -721,7 +787,7 @@
         if (media) {
           gsap.from(media, {
             y: 26,
-            opacity: .78,
+            opacity: .9,
             duration: .75,
             ease: 'power2.out',
             scrollTrigger: {
@@ -735,7 +801,7 @@
         if (copy) {
           gsap.from(copy, {
             y: 18,
-            opacity: .58,
+            opacity: .84,
             duration: .65,
             ease: 'power2.out',
             scrollTrigger: {
@@ -748,13 +814,21 @@
       });
     });
 
-    const refresh = () => requestAnimationFrame(() => {
-      measureHorizontalProtocols();
-      ScrollTrigger.refresh(true);
-      paintHorizontalProtocols();
-    });
+    let layoutRefreshFrame = 0;
+
+    const refresh = () => {
+      if (layoutRefreshFrame) return;
+      layoutRefreshFrame = requestAnimationFrame(() => {
+        layoutRefreshFrame = 0;
+        measureHorizontalProtocols();
+        ScrollTrigger.refresh(true);
+        paintHorizontalProtocols();
+      });
+    };
 
     addEventListener('load', refresh, { once: true });
+    addEventListener('resize', refresh, { passive: true });
+    protocolQuery.addEventListener?.('change', refresh);
 
     if (document.fonts?.ready) {
       document.fonts.ready.then(refresh).catch(() => {});
@@ -763,22 +837,33 @@
     qsa('img').forEach(img => {
       if (!img.complete) img.addEventListener('load', refresh, { once: true });
     });
+
+    refresh();
   }
+
+  finePointerQuery.addEventListener?.('change', () => {
+    targetPointerX = 0;
+    targetPointerY = 0;
+  });
+
+  motionQuery.addEventListener?.('change', () => {
+    targetPointerX = 0;
+    targetPointerY = 0;
+    if (activeScene) setOrbState(activeScene, true);
+  });
 
   /* ------------------------------------------------------------------------
      FAQ
      ------------------------------------------------------------------------ */
 
-  if (mobileQuery.matches) {
-    const details = qsa('.questions details');
+  const details = qsa('.questions details');
 
-    details.forEach(item => {
-      item.addEventListener('toggle', () => {
-        if (!item.open) return;
-        details.forEach(other => {
-          if (other !== item) other.open = false;
-        });
+  details.forEach(item => {
+    item.addEventListener('toggle', () => {
+      if (!mobileQuery.matches || !item.open) return;
+      details.forEach(other => {
+        if (other !== item) other.open = false;
       });
     });
-  }
+  });
 })();
