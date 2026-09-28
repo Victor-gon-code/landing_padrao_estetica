@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#efe8d8" />
+  <meta name="description" content="À FLOR — landing page conceito para saúde, estética e cuidado da pele." />
+  <title>À FLOR — estética que não apaga você</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-tone="cream">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-orbit" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="À Flor — início">
+      <span class="brand-mark">à</span><span>flor</span>
+    </a>
+    <div class="header-note">ESTÉTICA • PELE • PRESENÇA</div>
+    <button class="menu-trigger" type="button" aria-expanded="false" aria-controls="menu-panel">
+      <span>menu</span><i></i>
+    </button>
+  </header>
+
+  <nav class="menu-panel" id="menu-panel" aria-hidden="true">
+    <div class="menu-panel__inner">
+      <p class="eyebrow">vá direto ao ponto</p>
+      <a href="#cuidados">Cuidados</a>
+      <a href="#metodo">Como acontece</a>
+      <a href="#espaco">O espaço</a>
+      <a href="#contato">Agendar conversa</a>
+      <small>Demo comercial • conteúdo adaptável ao profissional</small>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero tone" data-tone="cream">
+      <div class="hero-disc" aria-hidden="true"></div>
+      <div class="hero-kicker">um cuidado que começa antes do procedimento</div>
+
+      <h1 class="hero-title" aria-label="À Flor">
+        <span class="hero-title__a">À</span>
+        <span class="hero-title__flor">FLOR</span>
+      </h1>
+
+      <figure class="hero-photo media-cut" data-parallax="0.07">
+        <img
+          src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=82&w=2200"
+          alt="Retrato em luz quente, com textura natural da pele"
+          fetchpriority="high"
+        />
+        <figcaption>pele real / luz real / sem filtros</figcaption>
+      </figure>
+
+      <div class="hero-copy">
+        <p>Estética não precisa apagar expressão, idade ou história.</p>
+        <p class="hero-copy__strong">Pode só devolver presença.</p>
+      </div>
+
+      <a class="round-link magnetic" href="#contato">
+        <span>quero uma<br>avaliação</span>
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 20h21M23 13l7 7-7 7"/></svg>
+      </a>
+
+      <div class="scroll-cue" aria-hidden="true"><span></span>role devagar</div>
+    </section>
+
+    <section class="manifesto tone" data-tone="coral">
+      <div class="transition-orb transition-orb--top" aria-hidden="true"></div>
+      <div class="manifesto-index">não é sobre “consertar”</div>
+      <p class="manifesto-line" data-reveal>
+        <span>A pele</span>
+        <em>muda.</em>
+      </p>
+      <p class="manifesto-line manifesto-line--indent" data-reveal>
+        <span>O cuidado</span>
+        <em>também.</em>
+      </p>
+      <div class="manifesto-note">
+        <p>Antes de qualquer técnica, existe uma conversa: o que incomoda, o que você quer preservar e o que não quer mudar.</p>
+        <svg class="scribble" viewBox="0 0 180 90" aria-hidden="true"><path d="M4 67c28-70 54-67 74-31 13 23 19 43 40 27 16-12 12-45 29-48 12-3 19 11 29 24"/></svg>
+      </div>
+    </section>
+
+    <section class="treatments tone" id="cuidados" data-tone="mint">
+      <div class="section-intro">
+        <p class="eyebrow">o que pode entrar no plano</p>
+        <h2>Cuidados escolhidos<br><i>pela sua pele,</i> não pela moda.</h2>
+        <p class="section-intro__aside">A lista abaixo é demonstrativa. Em um projeto real, entram somente os procedimentos que o profissional realmente oferece.</p>
+      </div>
+
+      <div class="treatment-list" role="list">
+        <button class="treatment-row" role="listitem" type="button" data-word="TEXTURA">
+          <span>Limpeza & renovação</span>
+          <small>para recuperar viço sem excessos</small>
+          <b>↗</b>
+        </button>
+        <button class="treatment-row" role="listitem" type="button" data-word="TEMPO">
+          <span>Estímulo de colágeno</span>
+          <small>quando o foco é qualidade de pele</small>
+          <b>↗</b>
+        </button>
+        <button class="treatment-row" role="listitem" type="button" data-word="GESTO">
+          <span>Cuidado facial</span>
+          <small>com plano construído caso a caso</small>
+          <b>↗</b>
+        </button>
+        <button class="treatment-row" role="listitem" type="button" data-word="CORPO">
+          <span>Protocolos corporais</span>
+          <small>sem promessas impossíveis</small>
+          <b>↗</b>
+        </button>
+      </div>
+      <div class="word-stage" aria-hidden="true"><span>PELE</span></div>
+    </section>
+
+    <section class="method tone" id="metodo" data-tone="lavender">
+      <div class="method-track" aria-hidden="true"><i></i></div>
+      <header class="method-header">
+        <p class="eyebrow">a experiência</p>
+        <h2>Você entra com uma pergunta.<br>Não com um pacote pronto.</h2>
+      </header>
+
+      <div class="method-flow">
+        <article>
+          <span class="verb">ouvir</span>
+          <p>Entender o que te trouxe até aqui — inclusive aquilo que você não quer perder no caminho.</p>
+        </article>
+        <article>
+          <span class="verb">ler</span>
+          <p>Observar pele, rotina, momento e possibilidades com calma. Menos catálogo; mais contexto.</p>
+        </article>
+        <article>
+          <span class="verb">cuidar</span>
+          <p>Escolher o mínimo necessário para chegar onde faz sentido para você.</p>
+        </article>
+        <article>
+          <span class="verb">acompanhar</span>
+          <p>Porque o resultado não termina na porta da clínica.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="space tone" id="espaco" data-tone="ink">
+      <div class="space-photo media-cut media-cut--wide" data-parallax="0.04">
+        <img
+          loading="lazy"
+          src="https://images.unsplash.com/photo-1763873993447-1d0be71a96d9?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=78&w=2200"
+          alt="Recepção minimalista com luz natural"
+        />
+      </div>
+      <div class="space-caption">
+        <p class="eyebrow">o espaço também cuida</p>
+        <h2>Sem pressa de clínica.<br><i>Sem pose de spa.</i></h2>
+        <p>Um lugar reservado, claro e tranquilo para conversar antes de decidir qualquer coisa.</p>
+      </div>
+      <div class="address-stamp" aria-label="Exemplo de localização">SÃO GABRIEL / RS<br>com hora marcada</div>
+    </section>
+
+    <section class="proof tone" data-tone="butter">
+      <div class="proof-quote">
+        <span class="quote-mark">“</span>
+        <blockquote>Quero me olhar no espelho e continuar me vendo. Só um pouco mais descansada.</blockquote>
+        <p>É uma frase possível de uma paciente — e também o filtro para cada decisão.</p>
+      </div>
+      <div class="proof-side">
+        <p class="eyebrow">o que esta página evita</p>
+        <p>Antes/depois forçado. Promessa de perfeição. “Rejuvenescimento em X dias”. Pressão para fechar procedimento.</p>
+        <p class="hand-note">confiança também converte.</p>
+      </div>
+    </section>
+
+    <section class="faq tone" data-tone="rose">
+      <header>
+        <p class="eyebrow">antes de marcar</p>
+        <h2>Perguntas que<br>ninguém deveria<br>ter vergonha de fazer.</h2>
+      </header>
+      <div class="faq-list">
+        <details>
+          <summary>Preciso saber qual procedimento quero?</summary>
+          <p>Não. A primeira conversa serve justamente para entender o que faz sentido — e o que não faz.</p>
+        </details>
+        <details>
+          <summary>Vou sair com “cara de procedimento”?</summary>
+          <p>A proposta desta marca-demo é trabalhar com naturalidade e decisão compartilhada. No site real, a resposta será ajustada à abordagem e habilitação do profissional.</p>
+        </details>
+        <details>
+          <summary>Posso só fazer uma avaliação?</summary>
+          <p>Sim. Conversar não obriga você a fazer nada.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="contact tone" id="contato" data-tone="deep">
+      <div class="contact-orbit" aria-hidden="true"><span>sem pressa • sem filtro • sem fórmula • </span></div>
+      <p class="eyebrow">se fez sentido</p>
+      <h2>Vem conversar<br><i>à flor da pele.</i></h2>
+      <a class="contact-cta magnetic" href="https://wa.me/5555999999999?text=Oi%2C%20vim%20pelo%20site%20e%20queria%20entender%20como%20funciona%20a%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
+        <span>abrir WhatsApp</span>
+        <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 20h21M23 13l7 7-7 7"/></svg>
+      </a>
+      <footer class="site-footer">
+        <span>À FLOR — conceito demonstrativo</span>
+        <span>São Gabriel / RS</span>
+        <span>© 2026</span>
+      </footer>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
