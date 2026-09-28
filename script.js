@@ -26,9 +26,27 @@ function boot() {
 function animateHero() {
   if (!window.gsap || reduced) return;
   const gsap = window.gsap;
-  gsap.from('.hero__line i', { yPercent: 120, duration: 1.2, stagger: .11, ease: 'power4.out' });
-  gsap.from('.hero__image', { clipPath: 'polygon(50% 50%,50% 50%,50% 50%,50% 50%)', scale: .92, duration: 1.45, ease: 'power4.out' }, .1);
-  gsap.from('.hero__eyebrow,.hero__intro,.hero__coords,.hero__scroll', { opacity: 0, y: 18, duration: .8, stagger: .08, ease: 'power2.out' }, .45);
+  gsap.from('.hero__line i', {
+    yPercent: 120,
+    duration: 1.2,
+    stagger: .11,
+    ease: 'power4.out'
+  });
+  gsap.from('.hero__image', {
+    clipPath: 'polygon(50% 50%,50% 50%,50% 50%,50% 50%)',
+    scale: .92,
+    duration: 1.45,
+    delay: .1,
+    ease: 'power4.out'
+  });
+  gsap.from('.hero__eyebrow,.hero__intro,.hero__coords,.hero__scroll', {
+    opacity: 0,
+    y: 18,
+    duration: .8,
+    delay: .45,
+    stagger: .08,
+    ease: 'power2.out'
+  });
 }
 
 function initMenu() {
@@ -36,34 +54,75 @@ function initMenu() {
   const open = $('.topbar__menu');
   const close = $('.menu__close');
   if (!menu || !open) return;
+
+  let returnFocus = null;
+  const focusableSelector = 'a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
   const set = (state) => {
     menu.classList.toggle('is-open', state);
     document.body.classList.toggle('menu-open', state);
     open.setAttribute('aria-expanded', String(state));
     menu.setAttribute('aria-hidden', String(!state));
-    if (state) menu.removeAttribute('inert'); else menu.setAttribute('inert', '');
+
+    if (state) {
+      returnFocus = document.activeElement;
+      menu.removeAttribute('inert');
+      requestAnimationFrame(() => close?.focus());
+    } else {
+      menu.setAttribute('inert', '');
+      if (returnFocus instanceof HTMLElement) returnFocus.focus();
+    }
   };
+
   open.addEventListener('click', () => set(true));
   close?.addEventListener('click', () => set(false));
   $$('.menu a').forEach(a => a.addEventListener('click', () => set(false)));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });
+
+  menu.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const focusable = $$(focusableSelector, menu).filter(el => !el.hasAttribute('inert'));
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && menu.classList.contains('is-open')) set(false);
+  });
 }
 
 function initTreatments() {
   const items = $$('.treatment-item');
   const photos = $$('.treatments__photo');
-  items.forEach(item => {
-    const button = $('button', item);
-    button?.addEventListener('click', () => {
-      items.forEach(el => {
-        const active = el === item;
-        el.classList.toggle('is-active', active);
-        $('button', el)?.setAttribute('aria-expanded', String(active));
-      });
-      const key = item.dataset.photo;
-      photos.forEach(photo => photo.classList.toggle('is-visible', photo.classList.contains(`treatments__photo--${key}`)));
+
+  const setActive = (selected) => {
+    items.forEach(item => {
+      const active = item === selected;
+      item.classList.toggle('is-active', active);
+      $('button', item)?.setAttribute('aria-expanded', String(active));
+      $('.treatment-item__body', item)?.setAttribute('aria-hidden', String(!active));
     });
+
+    const key = selected?.dataset.photo;
+    photos.forEach(photo => {
+      photo.classList.toggle('is-visible', Boolean(key) && photo.classList.contains(`treatments__photo--${key}`));
+    });
+  };
+
+  items.forEach(item => {
+    $('button', item)?.addEventListener('click', () => setActive(item));
   });
+
+  const initial = items.find(item => item.classList.contains('is-active')) || items[0];
+  if (initial) setActive(initial);
 }
 
 function initFaq() {
@@ -75,41 +134,116 @@ function initFaq() {
 }
 
 function initCursor() {
-  if (coarse || reduced) return;
+  if (coarse || reduced || !window.gsap) return;
+
   const cursor = $('.cursor');
-  if (!cursor || !window.gsap) return;
+  const cursorLabel = $('.cursor span');
+  if (!cursor || !cursorLabel) return;
+
   const gsap = window.gsap;
-  const xTo = gsap.quickTo(cursor, 'x', { duration: .3, ease: 'power3' });
-  const yTo = gsap.quickTo(cursor, 'y', { duration: .3, ease: 'power3' });
-  window.addEventListener('mousemove', e => { xTo(e.clientX); yTo(e.clientY); });
+  const cursorX = gsap.quickTo(cursor, 'x', { duration: .3, ease: 'power3' });
+  const cursorY = gsap.quickTo(cursor, 'y', { duration: .3, ease: 'power3' });
+
+  window.addEventListener('mousemove', e => {
+    cursorX(e.clientX);
+    cursorY(e.clientY);
+  }, { passive: true });
+
   $$('.image-warp').forEach(el => {
+    const img = $('img', el);
+    const canWarpImage = Boolean(img) && (el.classList.contains('hero__image') || el.classList.contains('gallery__shot'));
+    const baseScale = el.classList.contains('hero__image') ? 1.07 : 1;
+    const imageX = canWarpImage ? gsap.quickTo(img, 'xPercent', { duration: .45, ease: 'power3' }) : null;
+    const imageY = canWarpImage ? gsap.quickTo(img, 'yPercent', { duration: .45, ease: 'power3' }) : null;
+
     el.addEventListener('mouseenter', () => {
       cursor.classList.add('is-on');
-      $('.cursor span').textContent = el.dataset.cursor || 'ver';
+      cursorLabel.textContent = el.dataset.cursor || 'ver';
+      if (canWarpImage) gsap.to(img, { scale: baseScale + .035, duration: .55, ease: 'power3.out', overwrite: 'auto' });
     });
-    el.addEventListener('mouseleave', () => cursor.classList.remove('is-on'));
+
     el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      const dx = (e.clientX - r.left) / r.width - .5;
-      const dy = (e.clientY - r.top) / r.height - .5;
-      gsap.to($('img', el), { xPercent: dx * 2.5, yPercent: dy * 2.5, scale: 1.06, duration: .65, ease: 'power3.out' });
+      if (!canWarpImage) return;
+      const rect = el.getBoundingClientRect();
+      const dx = (e.clientX - rect.left) / rect.width - .5;
+      const dy = (e.clientY - rect.top) / rect.height - .5;
+      imageX(dx * 2.4);
+      imageY(dy * 2.4);
+    }, { passive: true });
+
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('is-on');
+      if (!canWarpImage) return;
+      imageX(0);
+      imageY(0);
+      gsap.to(img, { scale: baseScale, duration: .7, ease: 'power3.out', overwrite: 'auto' });
     });
-    el.addEventListener('mouseleave', () => gsap.to($('img', el), { xPercent: 0, yPercent: 0, scale: 1, duration: .8, ease: 'power3.out' }));
   });
+
+  window.addEventListener('blur', () => cursor.classList.remove('is-on'));
 }
 
 function initMagnetic() {
   if (coarse || reduced || !window.gsap) return;
   const gsap = window.gsap;
+
   $$('.magnetic').forEach(el => {
+    const moveX = gsap.quickTo(el, 'x', { duration: .32, ease: 'power3' });
+    const moveY = gsap.quickTo(el, 'y', { duration: .32, ease: 'power3' });
+
     el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      const dx = e.clientX - (r.left + r.width / 2);
-      const dy = e.clientY - (r.top + r.height / 2);
-      gsap.to(el, { x: dx * .08, y: dy * .15, duration: .35, ease: 'power3.out' });
+      const rect = el.getBoundingClientRect();
+      moveX((e.clientX - (rect.left + rect.width / 2)) * .08);
+      moveY((e.clientY - (rect.top + rect.height / 2)) * .15);
+    }, { passive: true });
+
+    el.addEventListener('mouseleave', () => {
+      moveX(0);
+      moveY(0);
     });
-    el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,.35)' }));
   });
+}
+
+function initSceneTone() {
+  const topbar = $('.topbar');
+  const label = $('#scene-label');
+  const scenes = $('.scene');
+  if (!scenes.length) return;
+
+  const setScene = (scene) => {
+    if (!scene) return;
+    if (label) label.textContent = scene.dataset.scene || '';
+    const tone = scene.dataset.tone || 'warm';
+    const dark = ['dark', 'ink', 'olive'].includes(tone);
+    topbar?.classList.toggle('is-dark', dark);
+    document.body.dataset.tone = tone;
+  };
+
+  const pickCurrent = () => {
+    const probe = innerHeight * .45;
+    const active = scenes.find(scene => {
+      const rect = scene.getBoundingClientRect();
+      return rect.top <= probe && rect.bottom >= probe;
+    });
+    setScene(active || scenes[0]);
+  };
+
+  pickCurrent();
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
+      if (visible[0]) setScene(visible[0].target);
+    }, { rootMargin: '-44% 0px -44% 0px', threshold: 0 });
+
+    scenes.forEach(scene => observer.observe(scene));
+  } else {
+    window.addEventListener('scroll', pickCurrent, { passive: true });
+  }
+
+  window.addEventListener('resize', pickCurrent, { passive: true });
 }
 
 function initScroll() {
@@ -147,22 +281,9 @@ function initScroll() {
   gsap.to('.place__curtain--b', { xPercent: 101, ease: 'power2.inOut', scrollTrigger: { trigger: '.place', start: 'top 70%', end: 'top 10%', scrub: .8 } });
   gsap.to('.place__image img', { scale: 1.11, yPercent: -4, ease: 'none', scrollTrigger: { trigger: '.place', start: 'top bottom', end: 'bottom top', scrub: 1 } });
 
-  const topbar = $('.topbar');
-  const label = $('#scene-label');
-  $$('.scene').forEach(scene => {
-    ScrollTrigger.create({
-      trigger: scene,
-      start: 'top 45%',
-      end: 'bottom 45%',
-      onEnter: () => setScene(scene),
-      onEnterBack: () => setScene(scene)
-    });
-  });
-  function setScene(scene) {
-    if (label) label.textContent = scene.dataset.scene || '';
-    const dark = ['dark','ink','olive'].includes(scene.dataset.tone);
-    topbar?.classList.toggle('is-dark', dark);
-    document.body.dataset.tone = scene.dataset.tone || '';
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
   }
 }
 
@@ -241,10 +362,7 @@ function initWebGL() {
     const mesh = new THREE.Mesh(geometry, material);
     mesh.userData = {
       base: new Float32Array(base),
-      phase,
-      cols,
-      rows,
-      baseOpacity: opacity
+      phase
     };
     return mesh;
   }
@@ -297,22 +415,38 @@ function initWebGL() {
     contact: { a:'#f1d5c7', b:'#c58d87', c:'#8a4b55', opacity:.16, x:.28, y:.08, scale:1.12 }
   };
 
+  Object.values(tones).forEach(tone => {
+    tone.colors = [new THREE.Color(tone.a), new THREE.Color(tone.b), new THREE.Color(tone.c)];
+  });
+
   let lastTone = 'warm';
   const current = {
     x: tones.warm.x,
     y: tones.warm.y,
     scale: tones.warm.scale,
     opacity: tones.warm.opacity,
-    colors: [
-      new THREE.Color(tones.warm.a),
-      new THREE.Color(tones.warm.b),
-      new THREE.Color(tones.warm.c)
-    ]
+    colors: tones.warm.colors.map(color => color.clone())
   };
 
   const layers = [back, middle, front];
   const clock = new THREE.Clock();
   let frame = 0;
+  let placementX = 3;
+  let viewportScale = 1;
+
+  const updateViewportTuning = () => {
+    if (innerWidth <= 640) {
+      placementX = 1.45;
+      viewportScale = .82;
+    } else if (innerWidth <= 980) {
+      placementX = 2.05;
+      viewportScale = .9;
+    } else {
+      placementX = 3;
+      viewportScale = 1;
+    }
+  };
+  updateViewportTuning();
 
   function animate() {
     const t = clock.getElapsedTime();
@@ -330,13 +464,13 @@ function initWebGL() {
     current.scale += (target.scale - current.scale) * .03;
     current.opacity += (target.opacity - current.opacity) * .03;
 
-    current.colors[0].lerp(new THREE.Color(target.a), .025);
-    current.colors[1].lerp(new THREE.Color(target.b), .025);
-    current.colors[2].lerp(new THREE.Color(target.c), .025);
+    current.colors[0].lerp(target.colors[0], .025);
+    current.colors[1].lerp(target.colors[1], .025);
+    current.colors[2].lerp(target.colors[2], .025);
 
-    skin.position.x = current.x * 3 + mouse.x * .14;
+    skin.position.x = current.x * placementX + mouse.x * .14;
     skin.position.y = current.y * 2.2 + mouse.y * .1;
-    skin.scale.setScalar(current.scale);
+    skin.scale.setScalar(current.scale * viewportScale);
     skin.rotation.x += ((mouse.y * .055) - skin.rotation.x) * .025;
     skin.rotation.y += ((mouse.x * .08) - skin.rotation.y) * .025;
 
@@ -360,7 +494,7 @@ function initWebGL() {
       }
 
       layer.geometry.attributes.position.needsUpdate = true;
-      if (!coarse && frame % 3 === 0) layer.geometry.computeVertexNormals();
+      if (!coarse && frame % 6 === 0) layer.geometry.computeVertexNormals();
       layer.material.color.copy(current.colors[layerIndex]);
       layer.material.opacity = current.opacity * (layerIndex === 1 ? 1 : .82);
       layer.rotation.z = layer.userData.homeRotZ + Math.sin(t * .16 + phase) * .025;
@@ -381,6 +515,7 @@ function initWebGL() {
       camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight, false);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.15 : 1.55));
+      updateViewportTuning();
     }, 100);
   });
 }
@@ -392,6 +527,7 @@ const start = () => {
   initFaq();
   initCursor();
   initMagnetic();
+  initSceneTone();
   initScroll();
   initWebGL();
 };
