@@ -23,7 +23,7 @@
   .contact{min-height:850px;padding-top:110px}.contact__eyebrow{margin-bottom:70px}.contact__title{font-size:21vw}.contact__button{height:72px;margin-top:85px;font-size:20px}.contact__meta{margin-top:60px}.contact__signature{font-size:44vw}
 }
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.preloader__track i,.statement__ticker div,.contact__marquee span,.hero__scroll b,.observation__scanner span{animation:none!important}.reveal{opacity:1!important;transform:none!important}.webgl{display:none}.image-warp img{transform:none!important}.menu,.topbar,.gallery__shot img,.treatments__photo,.treatment-item__arrow,.treatment-item__body{transition:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.preloader__track i,.statement__ticker div,.contact__marquee span,.hero__scroll b,.observation__scanner span{animation:none!important}.reveal{opacity:1!important;transform:none!important}.webgl{display:none}.image-warp img{transform:none!important}.preloader,.menu,.topbar,.gallery__shot img,.treatments__photo,.treatment-item__arrow,.treatment-item__body{transition:none!important}}
 
 body[data-tone="dark"] .webgl,
 body[data-tone="ink"] .webgl,
