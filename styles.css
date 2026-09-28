@@ -1364,7 +1364,7 @@ body.no-motion-lib .protocols__rail { display: none; }
   width: 100%;
   height: clamp(96px, 11vw, 176px);
   pointer-events: none;
-  z-index: 12;
+  z-index: 3;
   overflow: hidden;
   color: var(--bridge-color);
 }
@@ -1468,4 +1468,20 @@ body.no-motion-lib .protocols__rail { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .scene-bridge svg { transform: none !important; }
   .scene-bridge--top svg { transform: scaleY(-1) !important; }
+}
+
+
+/* Keep chapter content comfortably clear of the incoming material edge. */
+.ritual__sticky,
+.ritual__steps {
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 901px) {
+  .ritual { padding-top: max(18vh, 190px); }
+}
+
+@media (max-width: 900px) {
+  .ritual { padding-top: 160px; }
 }
