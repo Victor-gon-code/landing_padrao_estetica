@@ -172,124 +172,200 @@ function initWebGL() {
   const canvas = $('#webgl');
   if (!canvas) return;
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !coarse, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.25 : 1.7));
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: !coarse,
+    powerPreference: 'high-performance'
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.15 : 1.55));
   renderer.setSize(innerWidth, innerHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, .1, 100);
-  camera.position.set(0, 0, 7.6);
+  const camera = new THREE.PerspectiveCamera(31, innerWidth / innerHeight, .1, 100);
+  camera.position.set(0, 0, 8.8);
 
-  const group = new THREE.Group();
-  scene.add(group);
+  const skin = new THREE.Group();
+  scene.add(skin);
 
-  const detail = coarse ? 3 : 4;
-  const geo = new THREE.IcosahedronGeometry(1.55, detail);
-  const base = geo.attributes.position.array.slice();
-  const mat = new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color('#b87977'),
-    roughness: .28,
-    metalness: .02,
-    transmission: .13,
-    thickness: 1.3,
-    transparent: true,
-    opacity: .48,
-    clearcoat: .7,
-    clearcoatRoughness: .32
-  });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.rotation.set(.2, -.5, .1);
-  group.add(mesh);
+  function createSkinLayer(width, height, cols, rows, color, opacity, phase) {
+    const vertices = [];
+    const indices = [];
+    const base = [];
 
-  const ringMat = new THREE.MeshBasicMaterial({ color: '#5f1f2b', transparent: true, opacity: .12, wireframe: true });
-  const ring = new THREE.Mesh(new THREE.TorusKnotGeometry(2.05, .012, coarse ? 90 : 160, 8, 2, 5), ringMat);
-  group.add(ring);
+    for (let y = 0; y <= rows; y++) {
+      const v = y / rows;
+      const taper = .58 + Math.sin(v * Math.PI) * .42;
+      for (let x = 0; x <= cols; x++) {
+        const u = x / cols;
+        const px = (u - .5) * width * taper;
+        const py = (v - .5) * height;
+        const pz =
+          Math.sin(v * Math.PI * 1.7 + phase) * .18 +
+          Math.sin(u * Math.PI * 2.2 + phase * .7) * .1;
+        vertices.push(px, py, pz);
+        base.push(px, py, pz);
+      }
+    }
 
-  const pointsGeo = new THREE.BufferGeometry();
-  const count = coarse ? 65 : 130;
-  const pts = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    const r = 2.4 + Math.random() * 2.2;
-    const a = Math.random() * Math.PI * 2;
-    const b = (Math.random() - .5) * Math.PI;
-    pts[i*3] = Math.cos(a) * Math.cos(b) * r;
-    pts[i*3+1] = Math.sin(b) * r;
-    pts[i*3+2] = Math.sin(a) * Math.cos(b) * r;
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const a = y * (cols + 1) + x;
+        const b = a + 1;
+        const c = a + cols + 1;
+        const d = c + 1;
+        indices.push(a, c, b, b, c, d);
+      }
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+
+    const material = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(color),
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity,
+      roughness: .54,
+      metalness: 0,
+      transmission: .08,
+      thickness: .65,
+      clearcoat: .16,
+      clearcoatRoughness: .72,
+      depthWrite: false
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.userData = {
+      base: new Float32Array(base),
+      phase,
+      cols,
+      rows,
+      baseOpacity: opacity
+    };
+    return mesh;
   }
-  pointsGeo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-  const points = new THREE.Points(pointsGeo, new THREE.PointsMaterial({ color: '#5f1f2b', size: .018, transparent: true, opacity: .32 }));
-  group.add(points);
 
-  const key = new THREE.PointLight('#f5d5c4', 18, 20); key.position.set(3, 3, 5); scene.add(key);
-  const fill = new THREE.PointLight('#d7df85', 9, 15); fill.position.set(-4, -2, 3); scene.add(fill);
-  scene.add(new THREE.AmbientLight('#ffffff', 1.2));
+  const back = createSkinLayer(3.9, 5.6, coarse ? 18 : 28, coarse ? 24 : 38, '#d9b2a7', .2, .4);
+  const middle = createSkinLayer(3.45, 5.15, coarse ? 18 : 28, coarse ? 24 : 38, '#b66e73', .24, 1.7);
+  const front = createSkinLayer(3.1, 4.75, coarse ? 18 : 28, coarse ? 24 : 38, '#7e3342', .2, 2.9);
+
+  back.position.set(-.34, .08, -.55);
+  middle.position.set(.12, -.02, -.16);
+  front.position.set(.42, -.06, .2);
+  back.rotation.z = -.25;
+  middle.rotation.z = .08;
+  front.rotation.z = .31;
+  back.rotation.y = -.26;
+  middle.rotation.y = .14;
+  front.rotation.y = -.12;
+
+  skin.add(back, middle, front);
+
+  const key = new THREE.DirectionalLight('#fff2e6', 2.3);
+  key.position.set(3, 4, 6);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight('#f1b8ae', 1.05);
+  fill.position.set(-4, -1, 3);
+  scene.add(fill);
+  scene.add(new THREE.AmbientLight('#ffffff', .85));
 
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
-  if (!coarse) window.addEventListener('pointermove', e => {
-    mouse.tx = (e.clientX / innerWidth - .5) * 2;
-    mouse.ty = -(e.clientY / innerHeight - .5) * 2;
-  }, { passive: true });
+  if (!coarse) {
+    window.addEventListener('pointermove', (e) => {
+      mouse.tx = (e.clientX / innerWidth - .5) * 2;
+      mouse.ty = -(e.clientY / innerHeight - .5) * 2;
+    }, { passive: true });
+  }
 
   const tones = {
-    warm: { color: '#b87977', opacity: .48, x: .82, y: -.08, z: 0, scale: 1.0 },
-    dark: { color: '#d5c98d', opacity: .26, x: .92, y: .02, z: -.2, scale: .82 },
-    cream: { color: '#7d3140', opacity: .2, x: .03, y: .05, z: -.3, scale: 1.25 },
-    rose: { color: '#5f1f2b', opacity: .25, x: .72, y: .05, z: -.3, scale: .92 },
-    ink: { color: '#d7df85', opacity: .32, x: -.72, y: .05, z: -.25, scale: 1.05 },
-    olive: { color: '#e5d7bd', opacity: .26, x: .83, y: -.02, z: -.25, scale: .78 },
-    paper: { color: '#9b5a61', opacity: .19, x: -.78, y: .02, z: -.35, scale: .85 },
-    contact: { color: '#f1d4b9', opacity: .26, x: .3, y: .1, z: -.2, scale: 1.3 }
+    warm:    { a:'#d9b2a7', b:'#b66e73', c:'#7e3342', opacity:.23, x:.78, y:-.04, scale:1.02 },
+    dark:    { a:'#e9d7c4', b:'#bda98e', c:'#9a746b', opacity:.14, x:.86, y:.03, scale:.9 },
+    cream:   { a:'#dfb9ae', b:'#b76f74', c:'#7c3442', opacity:.13, x:.08, y:.04, scale:1.16 },
+    rose:    { a:'#f0c7ba', b:'#a95b66', c:'#642634', opacity:.14, x:.72, y:.04, scale:.94 },
+    ink:     { a:'#dfe3b0', b:'#b7b987', c:'#787c5b', opacity:.15, x:-.7, y:.05, scale:1.03 },
+    olive:   { a:'#eadcc9', b:'#c8b69e', c:'#8f7e6b', opacity:.13, x:.8, y:-.02, scale:.87 },
+    paper:   { a:'#e0b7ad', b:'#ad676e', c:'#793744', opacity:.12, x:-.72, y:.02, scale:.91 },
+    contact: { a:'#f1d5c7', b:'#c58d87', c:'#8a4b55', opacity:.16, x:.28, y:.08, scale:1.12 }
   };
-  let current = { ...tones.warm, colorObj: new THREE.Color(tones.warm.color) };
 
-  const clock = new THREE.Clock();
   let lastTone = 'warm';
+  const current = {
+    x: tones.warm.x,
+    y: tones.warm.y,
+    scale: tones.warm.scale,
+    opacity: tones.warm.opacity,
+    colors: [
+      new THREE.Color(tones.warm.a),
+      new THREE.Color(tones.warm.b),
+      new THREE.Color(tones.warm.c)
+    ]
+  };
+
+  const layers = [back, middle, front];
+  const clock = new THREE.Clock();
   let frame = 0;
+
   function animate() {
     const t = clock.getElapsedTime();
     frame += 1;
-    mouse.x += (mouse.tx - mouse.x) * .04;
-    mouse.y += (mouse.ty - mouse.y) * .04;
+
+    mouse.x += (mouse.tx - mouse.x) * .035;
+    mouse.y += (mouse.ty - mouse.y) * .035;
 
     const tone = document.body.dataset.tone || 'warm';
-    if (tone !== lastTone && tones[tone]) lastTone = tone;
-    const target = tones[lastTone] || tones.warm;
-    current.x += (target.x - current.x) * .035;
-    current.y += (target.y - current.y) * .035;
-    current.z += (target.z - current.z) * .035;
-    current.scale += (target.scale - current.scale) * .035;
-    current.opacity += (target.opacity - current.opacity) * .035;
-    current.colorObj.lerp(new THREE.Color(target.color), .03);
+    if (tones[tone]) lastTone = tone;
+    const target = tones[lastTone];
 
-    group.position.x = current.x * 2.7 + mouse.x * .18;
-    group.position.y = current.y * 2.1 + mouse.y * .14;
-    group.position.z = current.z;
-    group.scale.setScalar(current.scale);
-    group.rotation.x += ((mouse.y * .16 + t * .03) - group.rotation.x) * .025;
-    group.rotation.y += ((mouse.x * .22 + t * .055) - group.rotation.y) * .025;
-    mat.color.copy(current.colorObj);
-    mat.opacity = current.opacity;
-    ring.material.opacity = current.opacity * .42;
+    current.x += (target.x - current.x) * .03;
+    current.y += (target.y - current.y) * .03;
+    current.scale += (target.scale - current.scale) * .03;
+    current.opacity += (target.opacity - current.opacity) * .03;
 
-    const pos = geo.attributes.position.array;
-    for (let i = 0; i < pos.length; i += 3) {
-      const ox = base[i], oy = base[i+1], oz = base[i+2];
-      const len = Math.sqrt(ox*ox + oy*oy + oz*oz) || 1;
-      const wave = 1 + Math.sin(oy * 2.7 + t * 1.15) * .035 + Math.sin(ox * 3.4 - t * .8) * .024;
-      pos[i] = ox / len * 1.55 * wave;
-      pos[i+1] = oy / len * 1.55 * wave;
-      pos[i+2] = oz / len * 1.55 * wave;
-    }
-    geo.attributes.position.needsUpdate = true;
-    if (!coarse || frame % 2 === 0) geo.computeVertexNormals();
-    ring.rotation.z = t * .035;
-    ring.rotation.y = -t * .025;
-    points.rotation.y = t * .018;
+    current.colors[0].lerp(new THREE.Color(target.a), .025);
+    current.colors[1].lerp(new THREE.Color(target.b), .025);
+    current.colors[2].lerp(new THREE.Color(target.c), .025);
+
+    skin.position.x = current.x * 3 + mouse.x * .14;
+    skin.position.y = current.y * 2.2 + mouse.y * .1;
+    skin.scale.setScalar(current.scale);
+    skin.rotation.x += ((mouse.y * .055) - skin.rotation.x) * .025;
+    skin.rotation.y += ((mouse.x * .08) - skin.rotation.y) * .025;
+
+    layers.forEach((layer, layerIndex) => {
+      const pos = layer.geometry.attributes.position.array;
+      const base = layer.userData.base;
+      const phase = layer.userData.phase;
+
+      for (let i = 0; i < pos.length; i += 3) {
+        const bx = base[i];
+        const by = base[i + 1];
+        const bz = base[i + 2];
+        const vertical = by * .95;
+        const horizontal = bx * 1.25;
+
+        pos[i] = bx + Math.sin(vertical + t * .45 + phase) * (.035 + layerIndex * .012);
+        pos[i + 1] = by + Math.cos(horizontal * .7 - t * .32 + phase) * .025;
+        pos[i + 2] = bz
+          + Math.sin(vertical * 1.35 + t * .55 + phase) * (.12 + layerIndex * .025)
+          + Math.cos(horizontal + t * .38 + phase) * .07;
+      }
+
+      layer.geometry.attributes.position.needsUpdate = true;
+      if (!coarse && frame % 3 === 0) layer.geometry.computeVertexNormals();
+      layer.material.color.copy(current.colors[layerIndex]);
+      layer.material.opacity = current.opacity * (layerIndex === 1 ? 1 : .82);
+      layer.rotation.z += Math.sin(t * .16 + phase) * .00045;
+      layer.position.y += Math.sin(t * .22 + phase) * .00022;
+    });
 
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
   }
+
   animate();
 
   let resizeTimer;
@@ -299,7 +375,7 @@ function initWebGL() {
       camera.aspect = innerWidth / innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight, false);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.25 : 1.7));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, coarse ? 1.15 : 1.55));
     }, 100);
   });
 }
