@@ -263,6 +263,11 @@ function initWebGL() {
   middle.rotation.y = .14;
   front.rotation.y = -.12;
 
+  [back, middle, front].forEach(layer => {
+    layer.userData.homeY = layer.position.y;
+    layer.userData.homeRotZ = layer.rotation.z;
+  });
+
   skin.add(back, middle, front);
 
   const key = new THREE.DirectionalLight('#fff2e6', 2.3);
@@ -358,8 +363,8 @@ function initWebGL() {
       if (!coarse && frame % 3 === 0) layer.geometry.computeVertexNormals();
       layer.material.color.copy(current.colors[layerIndex]);
       layer.material.opacity = current.opacity * (layerIndex === 1 ? 1 : .82);
-      layer.rotation.z += Math.sin(t * .16 + phase) * .00045;
-      layer.position.y += Math.sin(t * .22 + phase) * .00022;
+      layer.rotation.z = layer.userData.homeRotZ + Math.sin(t * .16 + phase) * .025;
+      layer.position.y = layer.userData.homeY + Math.sin(t * .22 + phase) * .035;
     });
 
     renderer.render(scene, camera);
