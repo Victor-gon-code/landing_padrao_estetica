@@ -153,7 +153,6 @@
 
   /* Sem imagem: cada bloco cabe na própria tela do telefone. */
   .statement{
-    height:100svh;
     min-height:100svh;
     padding:clamp(82px,13svh,104px) 20px clamp(26px,4svh,38px)
   }
@@ -194,7 +193,6 @@
   .treatments__stamp i{font-size:6px}
 
   .lab{
-    height:100svh;
     min-height:100svh;
     padding:clamp(72px,10svh,86px) 20px clamp(18px,3svh,28px)
   }
@@ -226,7 +224,6 @@
   .place__number{bottom:43%;font-size:42vw}
 
   .faq{
-    height:100svh;
     min-height:100svh;
     padding:clamp(72px,10svh,88px) 20px clamp(18px,3svh,28px);
     display:flex;
@@ -242,7 +239,6 @@
   .faq details p{font-size:11px;line-height:1.45;padding:0 0 14px}
 
   .contact{
-    height:100svh;
     min-height:100svh;
     padding:clamp(78px,11svh,92px) 20px clamp(16px,2.5svh,24px)
   }
@@ -329,7 +325,7 @@
   .hero__image{top:300px;height:390px;width:48vw}
   .hero__intro{bottom:58px;width:43vw}
 
-  .statement,.lab,.faq,.contact{height:100svh;min-height:100svh}
+  .statement,.lab,.faq,.contact{min-height:100svh}
   .statement{padding-top:72px}
   .statement__type{font-size:clamp(52px,11vw,72px)}
   .lab{padding-top:66px}
