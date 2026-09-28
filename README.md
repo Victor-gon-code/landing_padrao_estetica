@@ -1,65 +1,36 @@
-# MATÉRIA — landing imersiva para saúde & estética
+# Estética Avançada Débora Bedin — proposta interativa
 
-Base conceitual para apresentar a clínicas, profissionais de estética e saúde da pele. A intenção é fugir deliberadamente do padrão de landing page de clínica: sem sequência de cards, sem bento, sem glassmorphism e sem blocos corporativos previsíveis.
+Branch de demonstração criada especificamente para a **Estética Avançada Débora Bedin**, em São Gabriel/RS.
 
-## Conceito
-**Pele é matéria viva.**
+## Direção
+A proposta abandona a sequência tradicional de cards de clínica e trabalha como uma peça editorial em movimento: tipografia grande, mudanças de atmosfera ao rolar a página, fotografia em recortes orgânicos, objeto 3D reativo, cursor contextual e microinterações.
 
-A interface trata textura, luz, estrutura e tempo como linguagem visual. O site funciona mais como uma experiência editorial/interativa do que como um template tradicional.
+A base técnica veio do experimento `landing_padrao_estetica`, mas a composição, narrativa, paleta, ritmo, cenas e comportamento foram redesenhados para esta apresentação.
 
 ## Stack
-- HTML semântico
-- CSS responsivo
-- JavaScript
-- Three.js / WebGL
-- GLSL (shader procedural da forma orgânica)
-- GSAP + ScrollTrigger
+- HTML semântico;
+- CSS responsivo dividido por responsabilidade;
+- JavaScript sem framework;
+- Three.js / WebGL;
+- GSAP + ScrollTrigger.
 
-## Experiências principais
-- objeto 3D orgânico deformável, reagindo a ponteiro e scroll;
-- paleta do 3D muda junto com a narrativa;
-- lente interativa de textura em fotografia macro;
-- sequência horizontal de cuidados no desktop;
-- versão vertical própria no mobile;
-- revelação cinematográfica do espaço;
-- tipografia cinética;
-- menu-mapa em tela cheia;
-- loader curto e direção de movimento consistente;
-- fallback automático se WebGL não estiver disponível;
-- redução de efeitos para aparelhos modestos e `prefers-reduced-motion`.
+## Arquivos
+- `index.html` — conteúdo e narrativa;
+- `debora-core.css` — fundação visual, navegação, hero e observação;
+- `debora-scenes.css` — tratamentos, experiência, galeria, espaço, FAQ e contato;
+- `debora-responsive.css` — tablet, mobile e reduced motion;
+- `script.js` — interações, scroll e objeto 3D;
+- `DEBORA_PUBLIC_SOURCES.md` — dados públicos conferidos e limites da demonstração.
 
-## Personalização obrigatória antes de apresentar a um cliente real
-1. Trocar `MATÉRIA` pelo nome/identidade do profissional ou clínica.
-2. Trocar o número do WhatsApp no `index.html`.
-3. Inserir apenas procedimentos que o profissional realmente oferece e está habilitado a realizar.
-4. Substituir São Gabriel/endereço se necessário.
-5. Preferir fotografias próprias do cliente. As imagens atuais são demonstrativas e vêm do Unsplash.
-6. Revisar todo texto clínico/publicitário conforme conselho profissional e categoria do cliente.
-
-## Imagens demonstrativas
-As fotografias remotas usadas nesta demo foram selecionadas no Unsplash e devem ser substituídas por material autorizado do cliente em produção. Para um site publicado, vale baixar, converter para WebP/AVIF e servir localmente.
-
-## Execução
-Não existe build step.
-
-Abra com Live Server no VS Code ou qualquer servidor HTTP simples:
+## Rodar localmente
 
 ```bash
 python -m http.server 8000
 ```
 
-Depois acesse `http://localhost:8000`.
+Abra `http://localhost:8000`.
 
-> Para ver WebGL e os recursos remotos corretamente, teste com conexão à internet.
+Os recursos de Three.js, GSAP, Google Fonts e as imagens editoriais são carregados da internet.
 
-
-## Revisão de acabamento
-A revisão atual reduziu sobreposições acidentais no hero e nos painéis de procedimentos, reorganizou o mobile para que imagem e texto tenham respiro próprio, corrigiu triggers de animação, suavizou a paleta e adicionou fallback para ausência de GSAP/WebGL.
-
-As áreas de procedimento agora deixam claro o que é **foto demonstrativa** e onde deve entrar **fotografia real do cliente**.
-
-### Referências de imagem demonstrativa adicionadas
-- Facial treatment — Unsplash, Karelys Ruiz: https://unsplash.com/photos/woman-receiving-facial-skincare-treatment-PqyzuzFiQfY
-- Facial mask application — Unsplash, Ernesto Samaniego: https://unsplash.com/photos/woman-applies-a-clear-textured-mask-to-another-womans-face-o9qR56aa9hw
-
-Essas imagens estão apenas na demo. Em produção, substituir por fotos autorizadas do atendimento real sempre que possível.
+## Antes de publicar
+A demonstração está com `noindex,nofollow`. As fotografias são editoriais e devem ser substituídas por material autorizado da profissional, do espaço e dos atendimentos. O perfil oficial do Instagram não foi confirmado nas buscas públicas, portanto nenhum @ ou conteúdo social foi inventado.
