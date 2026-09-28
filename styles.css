@@ -98,7 +98,9 @@ body.no-webgl .webgl-fallback { z-index: 0; opacity: 1; }
   color: #fff;
   mix-blend-mode: difference;
   pointer-events: none;
+  transition: transform .38s ease, opacity .28s ease;
 }
+.chrome.is-hidden { transform: translateY(-115%); opacity: 0; }
 .chrome > * { pointer-events: auto; }
 .chrome__brand,
 .chrome__cta {
@@ -148,10 +150,10 @@ body.no-webgl .webgl-fallback { z-index: 0; opacity: 1; }
 .site-map {
   position: fixed;
   inset: 0;
-  z-index: 95;
+  z-index: 140;
   background: var(--acid);
   color: #101115;
-  padding: 24px var(--pad) 28px;
+  padding: max(24px, env(safe-area-inset-top)) var(--pad) max(28px, env(safe-area-inset-bottom));
   transform: translateY(-102%);
   transition: transform .8s cubic-bezier(.77,0,.18,1);
   overflow: hidden;
@@ -180,6 +182,8 @@ body.map-open .site-map { transform: translateY(0); }
   z-index: 2;
   display: flex;
   justify-content: space-between;
+  gap: 28px;
+  padding-right: 2px;
   font: 300 9px/1 var(--mono);
   text-transform: uppercase;
   letter-spacing: .13em;
@@ -413,7 +417,7 @@ main { position: relative; z-index: 2; }
 .thesis__ticker {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 62px;
   width: 100%;
   border-bottom: 1px solid rgba(23,20,25,.25);
   padding: 11px 0 10px;
@@ -708,7 +712,7 @@ main { position: relative; z-index: 2; }
   border-radius: 50%;
   box-shadow: 0 0 0 7vw rgba(17,18,22,.035), 0 0 0 14vw rgba(17,18,22,.025);
 }
-.contact__eyeline { position:absolute; left:var(--pad); top:26px; font:300 8px/1 var(--mono); letter-spacing:.13em; }
+.contact__eyeline { position:absolute; left:var(--pad); top:74px; font:300 8px/1 var(--mono); letter-spacing:.13em; }
 .contact h2 {
   position: relative;
   z-index: 2;
@@ -759,13 +763,13 @@ main { position: relative; z-index: 2; }
 @media (max-width: 900px) {
   :root { --pad: 18px; }
   .noise { opacity: .08; }
-  .chrome { grid-template-columns: 1fr auto auto; gap: 15px; padding-top: 14px; }
+  .chrome { grid-template-columns: 1fr auto auto; gap: 14px; padding-top: max(14px, env(safe-area-inset-top)); }
   .chrome__live { display: none; }
   .chrome__cta { font-size: 9px; }
-  .site-map__links { width: 100%; margin-top: 12vh; }
+  .site-map__links { width: 100%; margin-top: 11vh; }
   .site-map__links a { grid-template-columns: 68px 1fr; }
   .site-map__links span { font-size: 14vw; }
-  .site-map__foot { width: 75vw; }
+  .site-map__foot { width: 75vw; bottom: max(26px, env(safe-area-inset-bottom)); }
 
   .hero { min-height: 900px; padding-top: 72px; }
   .hero::before { background: linear-gradient(180deg, rgba(243,239,230,.96) 0%, rgba(243,239,230,.84) 58%, rgba(243,239,230,.2) 100%); }
@@ -863,11 +867,11 @@ main { position: relative; z-index: 2; }
   .questions summary { font-size: 20px; }
   .questions details p { padding-right: 0; }
 
-  .contact { min-height: 820px; }
+  .contact { min-height: 820px; padding-top: 110px; }
   .contact h2 { font-size: 20vw; }
   .contact h2 em { margin-left: 4vw; }
   .contact h2 span:last-child { margin-left: 0; }
-  .contact__button { align-self: stretch; width: auto; margin-top: 7vh; }
+  .contact__button { align-self: stretch; width: auto; margin-top: 6vh; }
   .contact__meta { grid-template-columns: 1fr auto; }
   .contact__meta span:nth-child(2) { display: none; }
 }
@@ -913,4 +917,21 @@ body.no-motion-lib .protocols__rail { display: none; }
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   .scan__ring { display: none; }
   .scan__detail { clip-path: circle(24vw at 66% 45%); }
+}
+
+
+/* Final polish: keep fixed chrome from visually colliding with top-of-scene copy. */
+@media (min-width: 901px) {
+  .thesis { padding-top: 21vh; }
+  .contact { padding-top: 14vh; }
+}
+
+@media (max-width: 560px) {
+  .chrome__brand { font-size: 10px; }
+  .chrome__cta { font-size: 8px; }
+  .map-toggle { width: 42px; }
+  .site-map__head > span { max-width: 54vw; line-height: 1.35; }
+  .site-map__links { margin-top: 9vh; }
+  .site-map__links span { font-size: 13vw; }
+  .contact__eyeline { top: 70px; }
 }
