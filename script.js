@@ -40,6 +40,7 @@
     const shape = bridgeShapes[spec.variant];
     const bridge = document.createElement('div');
     bridge.className = `scene-bridge scene-bridge--${spec.edge}`;
+    bridge.setAttribute('aria-hidden', 'true');
     bridge.style.setProperty('--bridge-color', spec.color);
     bridge.style.setProperty('--bridge-line', spec.line);
     bridge.dataset.pathStart = shape.start;
