@@ -207,7 +207,7 @@ function initMagnetic() {
 function initSceneTone() {
   const topbar = $('.topbar');
   const label = $('#scene-label');
-  const scenes = $('.scene');
+  const scenes = $$('.scene');
   if (!scenes.length) return;
 
   const setScene = (scene) => {
