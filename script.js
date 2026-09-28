@@ -6,6 +6,66 @@
   const finePointer = matchMedia('(pointer:fine)').matches;
   const lowPower = isMobile || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4);
 
+
+  // ---------- organic chapter seams ----------
+  const bridgeShapes = {
+    a: {
+      start: 'M0 92 C165 72 250 118 430 86 C610 52 740 104 900 74 C1035 48 1120 65 1200 58',
+      end:   'M0 56 C170 28 300 104 470 60 C635 18 760 86 930 42 C1045 20 1130 46 1200 34'
+    },
+    b: {
+      start: 'M0 68 C120 42 270 54 390 92 C555 145 660 58 820 76 C1000 96 1090 38 1200 66',
+      end:   'M0 38 C130 14 280 30 415 68 C565 108 690 28 845 52 C1000 76 1100 18 1200 42'
+    },
+    c: {
+      start: 'M0 104 C190 118 290 44 455 62 C635 82 710 132 885 92 C1045 55 1110 88 1200 76',
+      end:   'M0 64 C185 82 310 18 480 38 C650 58 745 94 900 58 C1045 24 1130 52 1200 44'
+    }
+  };
+
+  const bridgeSpecs = [
+    { selector: '.hero',      color: '#111216', line: 'rgba(243,239,230,.32)', variant: 'a', edge: 'bottom' },
+    { selector: '.scan',      color: '#ead7dc', line: 'rgba(216,238,114,.32)', variant: 'b', edge: 'bottom' },
+    { selector: '.thesis',    color: '#121319', line: 'rgba(239,115,92,.32)',  variant: 'c', edge: 'bottom' },
+    { selector: '.ritual',    color: '#d8ee72', line: 'rgba(23,20,25,.22)',   variant: 'b', edge: 'top' },
+    { selector: '.ritual',    color: '#15161a', line: 'rgba(170,185,231,.3)',  variant: 'a', edge: 'bottom' },
+    { selector: '.room',      color: '#ead7dc', line: 'rgba(216,238,114,.28)', variant: 'c', edge: 'bottom' },
+    { selector: '.questions', color: '#d8ee72', line: 'rgba(239,115,92,.3)',  variant: 'b', edge: 'bottom' }
+  ];
+
+  function makeBridge(spec) {
+    const host = qs(spec.selector);
+    if (!host || host.querySelector(`.scene-bridge--${spec.edge}`)) return;
+
+    const shape = bridgeShapes[spec.variant];
+    const bridge = document.createElement('div');
+    bridge.className = `scene-bridge scene-bridge--${spec.edge}`;
+    bridge.style.setProperty('--bridge-color', spec.color);
+    bridge.style.setProperty('--bridge-line', spec.line);
+    bridge.dataset.pathStart = shape.start;
+    bridge.dataset.pathEnd = shape.end;
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 1200 160');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+
+    const fill = document.createElementNS(svgNS, 'path');
+    fill.classList.add('scene-bridge__fill');
+    fill.setAttribute('d', `${shape.start} L1200 160 L0 160 Z`);
+
+    const hairline = document.createElementNS(svgNS, 'path');
+    hairline.classList.add('scene-bridge__hairline');
+    hairline.setAttribute('d', shape.start);
+
+    svg.append(fill, hairline);
+    bridge.append(svg);
+    host.append(bridge);
+  }
+
+  bridgeSpecs.forEach(makeBridge);
+
   // ---------- loader ----------
   const boot = qs('.boot');
   const bootBar = qs('.boot__line i');
@@ -289,6 +349,44 @@
       });
       gsap.from('.hero__portrait', { clipPath: 'polygon(47% 47%,53% 47%,53% 53%,47% 53%,47% 47%)', duration: 1.3, ease: 'power4.inOut', delay: .38 });
       gsap.from('.hero__signal,.hero__thought,.hero__start', { opacity: 0, y: 18, duration: .8, stagger: .08, delay: .75 });
+    }
+
+    if (!reduceMotion) {
+      qsa('.scene-bridge').forEach((bridge, index) => {
+        const host = bridge.parentElement;
+        const fill = qs('.scene-bridge__fill', bridge);
+        const hairline = qs('.scene-bridge__hairline', bridge);
+        const endCurve = bridge.dataset.pathEnd;
+        const isTop = bridge.classList.contains('scene-bridge--top');
+        const triggerConfig = isTop
+          ? { trigger: host, start: 'top 102%', end: 'top 36%', scrub: .9 }
+          : { trigger: host, start: 'bottom 112%', end: 'bottom 46%', scrub: .9 };
+
+        if (fill && hairline && endCurve) {
+          gsap.to(fill, {
+            attr: { d: `${endCurve} L1200 160 L0 160 Z` },
+            ease: 'none',
+            scrollTrigger: triggerConfig
+          });
+          gsap.to(hairline, {
+            attr: { d: endCurve },
+            ease: 'none',
+            scrollTrigger: { ...triggerConfig }
+          });
+        }
+
+        const svg = qs('svg', bridge);
+        if (svg && !isTop) {
+          gsap.fromTo(svg,
+            { xPercent: index % 2 ? 0.7 : -0.7 },
+            {
+              xPercent: index % 2 ? -0.7 : 0.7,
+              ease: 'none',
+              scrollTrigger: { ...triggerConfig }
+            }
+          );
+        }
+      });
     }
 
     qsa('.scene[data-orb]').forEach(section => {
