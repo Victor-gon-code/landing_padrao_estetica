@@ -756,19 +756,18 @@ body.map-open .site-map { transform: translateY(0); }
 }
 
 .protocol-track {
-  display: flex;
-  width: max-content;
+  position: relative;
+  width: 100%;
   height: 100%;
   min-height: 100svh;
-  transform: translate3d(0,0,0);
-  will-change: transform;
-  backface-visibility: hidden;
+  overflow: hidden;
 }
 
 .protocol-panel {
-  position: relative;
-  flex: 0 0 100vw;
-  width: 100vw;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   min-height: 100svh;
   padding: 112px clamp(44px, 7vw, 126px) 70px;
   display: grid;
@@ -776,6 +775,20 @@ body.map-open .site-map { transform: translateY(0); }
   align-items: center;
   gap: clamp(42px, 7vw, 128px);
   overflow: hidden;
+  background: var(--dark);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate3d(7vw,0,0) scale(.992);
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.protocol-panel:first-child {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0,0,0) scale(1);
 }
 
 .protocol-panel--intro {
@@ -1568,18 +1581,29 @@ body.map-open .site-map { transform: translateY(0); }
   .protocols__rail { display: none; }
 
   .protocol-track {
+    position: relative;
     display: block;
     width: 100%;
+    height: auto;
     min-height: 0;
+    overflow: visible;
   }
 
   .protocol-panel {
+    position: relative;
+    inset: auto;
     width: 100%;
+    height: auto;
     min-height: auto;
     padding: 92px 18px 104px;
     display: flex;
     flex-direction: column;
     gap: 0;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto;
+    transform: none !important;
+    will-change: auto;
   }
 
   .protocol-panel--intro {
@@ -2002,9 +2026,16 @@ body.map-open .site-map { transform: translateY(0); }
   }
 
   .protocol-panel {
+    position: relative;
+    inset: auto;
     width: 100%;
+    height: auto;
     min-height: 100svh;
-    flex: none;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto;
+    transform: none !important;
+    will-change: auto;
   }
 }
 
@@ -2034,8 +2065,15 @@ body.map-open .site-map { transform: translateY(0); }
   }
 
   .protocol-panel {
+    position: relative;
+    inset: auto;
     width: 100%;
+    height: auto;
     min-height: 100svh;
-    flex: none;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto;
+    transform: none !important;
+    will-change: auto;
   }
 }
