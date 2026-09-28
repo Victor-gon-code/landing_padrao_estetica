@@ -2,6 +2,12 @@
   const qs = (selector, root = document) => root.querySelector(selector);
   const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
 
+  // External libraries are captured once. This avoids relying on implicit
+  // global identifier lookup inside this ES module.
+  const THREE_NS = window.THREE;
+  const gsapLib = window.gsap;
+  const ScrollTriggerLib = window.ScrollTrigger;
+
   const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointerQuery = matchMedia('(pointer: fine)');
   const mobileQuery = matchMedia('(max-width: 900px)');
@@ -102,8 +108,8 @@
     if (bootNumber) bootNumber.textContent = '100';
 
     setTimeout(() => {
-      if (window.gsap && !prefersReducedMotion()) {
-        gsap.to(boot, {
+      if (gsapLib && !prefersReducedMotion()) {
+        gsapLib.to(boot, {
           yPercent: -100,
           duration: .82,
           ease: 'power4.inOut',
@@ -339,33 +345,35 @@
   `;
 
   function color(hex) {
-    return new THREE.Color(hex);
+    return new THREE_NS.Color(hex);
   }
 
   function initWebGL() {
-    if (!canvas || !window.THREE) throw new Error('Three.js unavailable');
+    if (!canvas || !THREE_NS) throw new Error('Three.js unavailable');
 
-    renderer = new THREE.WebGLRenderer({
+    renderer = new THREE_NS.WebGLRenderer({
       canvas,
       alpha: true,
       antialias: !isLowPower(),
       powerPreference: isLowPower() ? 'low-power' : 'high-performance'
     });
 
+    const width = Math.max(1, document.documentElement.clientWidth);
+    const height = Math.max(1, innerHeight);
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, isLowPower() ? 1.15 : 1.6));
-    renderer.setSize(innerWidth, innerHeight, false);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setSize(width, height, false);
+    renderer.outputColorSpace = THREE_NS.SRGBColorSpace;
 
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, .1, 100);
+    scene = new THREE_NS.Scene();
+    camera = new THREE_NS.PerspectiveCamera(34, innerWidth / innerHeight, .1, 100);
     camera.position.z = 5.1;
 
-    const geometry = new THREE.IcosahedronGeometry(
+    const geometry = new THREE_NS.IcosahedronGeometry(
       mobileQuery.matches ? 1.18 : 1.48,
       isLowPower() ? 3 : 5
     );
 
-    material = new THREE.ShaderMaterial({
+    material = new THREE_NS.ShaderMaterial({
       transparent: true,
       depthWrite: false,
       uniforms: {
@@ -379,7 +387,7 @@
       fragmentShader
     });
 
-    mesh = new THREE.Mesh(geometry, material);
+    mesh = new THREE_NS.Mesh(geometry, material);
     mesh.position.set(mobileQuery.matches ? .72 : 1.55, .02, 0);
     mesh.rotation.set(.35, -.65, -.12);
     scene.add(mesh);
@@ -398,8 +406,8 @@
   }
 
   function rebuildWebGLGeometry() {
-    if (!mesh || !window.THREE) return;
-    const next = new THREE.IcosahedronGeometry(
+    if (!mesh || !THREE_NS) return;
+    const next = new THREE_NS.IcosahedronGeometry(
       mobileQuery.matches ? 1.18 : 1.48,
       isLowPower() ? 3 : 5
     );
@@ -417,17 +425,17 @@
     const scale = Number(section.dataset.orbScale || 1) * (mobile ? .76 : .96);
     const duration = immediate || prefersReducedMotion() ? 0 : .95;
 
-    if (window.gsap) {
-      gsap.to(mesh.position, { x, y, duration, ease: 'power2.out', overwrite: true });
-      gsap.to(mesh.scale, { x: scale, y: scale, z: scale, duration, ease: 'power2.out', overwrite: true });
+    if (gsapLib) {
+      gsapLib.to(mesh.position, { x, y, duration, ease: 'power2.out', overwrite: true });
+      gsapLib.to(mesh.scale, { x: scale, y: scale, z: scale, duration, ease: 'power2.out', overwrite: true });
 
       const a = color(colors[0]);
       const b = color(colors[1]);
       const edge = color(colors[2]);
 
-      gsap.to(material.uniforms.uColorA.value, { r: a.r, g: a.g, b: a.b, duration, overwrite: true });
-      gsap.to(material.uniforms.uColorB.value, { r: b.r, g: b.g, b: b.b, duration, overwrite: true });
-      gsap.to(material.uniforms.uEdge.value, { r: edge.r, g: edge.g, b: edge.b, duration, overwrite: true });
+      gsapLib.to(material.uniforms.uColorA.value, { r: a.r, g: a.g, b: a.b, duration, overwrite: true });
+      gsapLib.to(material.uniforms.uColorB.value, { r: b.r, g: b.g, b: b.b, duration, overwrite: true });
+      gsapLib.to(material.uniforms.uEdge.value, { r: edge.r, g: edge.g, b: edge.b, duration, overwrite: true });
     } else {
       mesh.position.set(x, y, 0);
       mesh.scale.setScalar(scale);
@@ -444,6 +452,22 @@
     document.body.classList.add('no-webgl');
     console.warn('WebGL fallback active:', error);
   }
+
+  canvas?.addEventListener('webglcontextlost', event => {
+    event.preventDefault();
+    webglReady = false;
+    stopRenderLoop();
+    document.body.classList.add('no-webgl');
+  });
+
+  canvas?.addEventListener('webglcontextrestored', () => {
+    if (!renderer || !scene || !camera || !mesh || !material) return;
+    webglReady = true;
+    document.body.classList.remove('no-webgl');
+    resizeWebGL();
+    if (activeScene) setOrbState(activeScene, true);
+    startRenderLoop();
+  });
 
   function startRenderLoop() {
     if (!webglReady || document.hidden || renderFrame) return;
@@ -602,15 +626,15 @@
      Scroll choreography
      ------------------------------------------------------------------------ */
 
-  if (!window.gsap || !window.ScrollTrigger || typeof gsap.registerPlugin !== 'function') {
+  if (!gsapLib || !ScrollTriggerLib || typeof gsapLib.registerPlugin !== 'function') {
     document.body.classList.add('no-motion-lib');
   } else {
     document.body.classList.remove('no-motion-lib');
-    gsap.registerPlugin(ScrollTrigger);
-    const mm = gsap.matchMedia();
+    gsapLib.registerPlugin(ScrollTrigger);
+    const mm = gsapLib.matchMedia();
 
     if (!prefersReducedMotion()) {
-      gsap.from('.hero__line span', {
+      gsapLib.from('.hero__line span', {
         opacity: 0,
         y: 28,
         duration: .9,
@@ -619,14 +643,14 @@
         delay: .32
       });
 
-      gsap.from('.hero__portrait', {
+      gsapLib.from('.hero__portrait', {
         clipPath: 'polygon(45% 46%,55% 46%,55% 54%,45% 54%)',
         duration: 1.08,
         ease: 'power4.inOut',
         delay: .26
       });
 
-      gsap.from('.hero__signal,.hero__thought,.hero__start', {
+      gsapLib.from('.hero__signal,.hero__thought,.hero__start', {
         opacity: 0,
         y: 14,
         duration: .7,
@@ -649,19 +673,19 @@
           scrub: .7
         };
 
-        gsap.to(fill, {
+        gsapLib.to(fill, {
           attr: { d: `${endCurve} L1200 100 L0 100 Z` },
           ease: 'none',
           scrollTrigger: trigger
         });
 
-        gsap.to(line, {
+        gsapLib.to(line, {
           attr: { d: endCurve },
           ease: 'none',
           scrollTrigger: { ...trigger }
         });
 
-        gsap.fromTo(svg,
+        gsapLib.fromTo(svg,
           { xPercent: index % 2 ? .45 : -.45 },
           {
             xPercent: index % 2 ? -.45 : .45,
@@ -673,7 +697,7 @@
     }
 
     qsa('.scene[data-orb]').forEach(section => {
-      ScrollTrigger.create({
+      ScrollTriggerLib.create({
         trigger: section,
         start: 'top 55%',
         end: 'bottom 45%',
@@ -684,26 +708,26 @@
 
     mm.add('(min-width: 901px)', () => {
       if (!prefersReducedMotion()) {
-        gsap.to('.thesis-word--a', {
+        gsapLib.to('.thesis-word--a', {
           xPercent: 5,
           ease: 'none',
           scrollTrigger: { trigger: '.thesis', start: 'top bottom', end: 'bottom top', scrub: 1 }
         });
 
-        gsap.to('.thesis-word--b', {
+        gsapLib.to('.thesis-word--b', {
           xPercent: -4,
           ease: 'none',
           scrollTrigger: { trigger: '.thesis', start: 'top bottom', end: 'bottom top', scrub: 1 }
         });
 
-        gsap.to('.thesis-word--c', {
+        gsapLib.to('.thesis-word--c', {
           xPercent: 3,
           ease: 'none',
           scrollTrigger: { trigger: '.thesis', start: 'top bottom', end: 'bottom top', scrub: 1 }
         });
 
         qsa('.ritual__steps article').forEach(article => {
-          gsap.fromTo(article,
+          gsapLib.fromTo(article,
             { opacity: .76, y: 14 },
             {
               opacity: 1,
@@ -719,7 +743,7 @@
           );
         });
 
-        gsap.fromTo('.room__shutter--a',
+        gsapLib.fromTo('.room__shutter--a',
           { xPercent: 0 },
           {
             xPercent: -101,
@@ -733,7 +757,7 @@
           }
         );
 
-        gsap.fromTo('.room__shutter--b',
+        gsapLib.fromTo('.room__shutter--b',
           { xPercent: 0 },
           {
             xPercent: 101,
@@ -747,7 +771,7 @@
           }
         );
 
-        gsap.to('.room__image img', {
+        gsapLib.to('.room__image img', {
           scale: 1.09,
           ease: 'none',
           scrollTrigger: {
@@ -764,7 +788,7 @@
       if (prefersReducedMotion()) return;
 
       if (scan) {
-        gsap.fromTo(scan,
+        gsapLib.fromTo(scan,
           { '--x': '72%', '--y': '34%' },
           {
             '--x': '58%',
@@ -785,7 +809,7 @@
         const copy = panel.querySelector('.protocol-panel__text');
 
         if (media) {
-          gsap.from(media, {
+          gsapLib.from(media, {
             y: 26,
             opacity: .9,
             duration: .75,
@@ -799,7 +823,7 @@
         }
 
         if (copy) {
-          gsap.from(copy, {
+          gsapLib.from(copy, {
             y: 18,
             opacity: .84,
             duration: .65,
@@ -821,7 +845,7 @@
       layoutRefreshFrame = requestAnimationFrame(() => {
         layoutRefreshFrame = 0;
         measureHorizontalProtocols();
-        ScrollTrigger.refresh(true);
+        ScrollTriggerLib.refresh(true);
         paintHorizontalProtocols();
       });
     };
