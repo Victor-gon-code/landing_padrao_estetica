@@ -42,11 +42,39 @@
     document.body.classList.toggle('map-open', open);
     mapToggle.setAttribute('aria-expanded', String(open));
     siteMap.setAttribute('aria-hidden', String(!open));
+    if (!open && scrollY < 84) qs('.chrome')?.classList.remove('is-hidden');
   }
   mapToggle?.addEventListener('click', () => setMap(!document.body.classList.contains('map-open')));
   mapClose?.addEventListener('click', () => setMap(false));
   qsa('.site-map a').forEach(a => a.addEventListener('click', () => setMap(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape') setMap(false); });
+
+  // ---------- fixed header behavior ----------
+  const chrome = qs('.chrome');
+  let lastScrollY = scrollY;
+  let headerTicking = false;
+
+  function updateChrome() {
+    const current = scrollY;
+    if (document.body.classList.contains('map-open')) {
+      chrome?.classList.add('is-hidden');
+    } else if (current < 84) {
+      chrome?.classList.remove('is-hidden');
+    } else if (current > lastScrollY + 7) {
+      chrome?.classList.add('is-hidden');
+    } else if (current < lastScrollY - 7) {
+      chrome?.classList.remove('is-hidden');
+    }
+    lastScrollY = current;
+    headerTicking = false;
+  }
+
+  addEventListener('scroll', () => {
+    if (!headerTicking) {
+      requestAnimationFrame(updateChrome);
+      headerTicking = true;
+    }
+  }, { passive: true });
 
   // ---------- section label ----------
   const sceneName = qs('#scene-name');
