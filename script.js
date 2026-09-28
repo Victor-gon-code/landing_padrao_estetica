@@ -3,6 +3,7 @@
   const qsa = (s, root = document) => [...root.querySelectorAll(s)];
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = matchMedia('(max-width: 900px)').matches;
+  const finePointer = matchMedia('(pointer:fine)').matches;
   const lowPower = isMobile || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4);
 
   // ---------- loader ----------
@@ -89,14 +90,14 @@
 
   // ---------- scan lens ----------
   const scanMedia = qs('#scan-media');
-  if (scanMedia && !reduceMotion) {
+  if (scanMedia && !reduceMotion && finePointer) {
     let tx = 64, ty = 48, x = tx, y = ty;
     const setTarget = e => {
       const r = scanMedia.getBoundingClientRect();
       tx = Math.max(8, Math.min(92, ((e.clientX - r.left) / r.width) * 100));
       ty = Math.max(10, Math.min(90, ((e.clientY - r.top) / r.height) * 100));
     };
-    if (matchMedia('(pointer:fine)').matches) scanMedia.addEventListener('pointermove', setTarget, { passive: true });
+    scanMedia.addEventListener('pointermove', setTarget, { passive: true });
     const animateLens = () => {
       x += (tx - x) * .09;
       y += (ty - y) * .09;
@@ -214,9 +215,9 @@
   function setOrbState(section, immediate = false) {
     if (!webglReady || !mesh || !material || !section) return;
     const colors = (section.dataset.orb || '#ff6d4a,#f5d7cc,#231b21').split(',');
-    const x = Number(section.dataset.orbX || 0) * (isMobile ? .9 : 1.55);
-    const y = Number(section.dataset.orbY || 0);
-    const scale = Number(section.dataset.orbScale || 1);
+    const x = Number(section.dataset.orbX || 0) * (isMobile ? .62 : 1.55);
+    const y = Number(section.dataset.orbY || 0) * (isMobile ? .72 : 1);
+    const scale = Number(section.dataset.orbScale || 1) * (isMobile ? .82 : 1);
     const duration = immediate || reduceMotion ? 0 : 1.15;
 
     if (window.gsap) {
@@ -244,7 +245,7 @@
 
   addEventListener('resize', resizeWebGL, { passive: true });
   addEventListener('pointermove', e => {
-    if (!webglReady || reduceMotion) return;
+    if (!webglReady || reduceMotion || !finePointer) return;
     targetX = (e.clientX / innerWidth - .5) * .32;
     targetY = (e.clientY / innerHeight - .5) * .22;
   }, { passive: true });
@@ -309,6 +310,57 @@
       gsap.fromTo('.room__shutter--b', { xPercent: 0 }, { xPercent: 101, ease: 'none', scrollTrigger: { trigger: '.room', start: 'top 70%', end: 'top 18%', scrub: 1 } });
       gsap.to('.room__image img', { scale: 1.12, ease: 'none', scrollTrigger: { trigger: '.room', start: 'top bottom', end: 'bottom top', scrub: 1.2 } });
     }
+
+    mm.add('(max-width: 900px)', () => {
+      if (reduceMotion) return;
+
+      if (scanMedia) {
+        gsap.fromTo(scanMedia,
+          { '--x': '72%', '--y': '32%' },
+          {
+            '--x': '42%',
+            '--y': '58%',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.scan',
+              start: 'top 85%',
+              end: 'bottom 20%',
+              scrub: .8
+            }
+          }
+        );
+      }
+
+      qsa('.protocol-panel--texture, .protocol-panel--structure, .protocol-panel--expression').forEach(panel => {
+        const media = panel.querySelector('figure, .procedure-slot');
+        const copy = panel.querySelector('.protocol-panel__text');
+        if (media) {
+          gsap.from(media, {
+            y: 36,
+            scale: .985,
+            opacity: .72,
+            scrollTrigger: {
+              trigger: panel,
+              start: 'top 78%',
+              end: 'top 42%',
+              scrub: .7
+            }
+          });
+        }
+        if (copy) {
+          gsap.from(copy, {
+            y: 26,
+            opacity: .45,
+            scrollTrigger: {
+              trigger: copy,
+              start: 'top 92%',
+              end: 'top 66%',
+              scrub: .55
+            }
+          });
+        }
+      });
+    });
 
     mm.add('(min-width: 901px)', () => {
       if (reduceMotion) return;
