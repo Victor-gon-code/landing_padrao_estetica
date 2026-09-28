@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <noscript><style>.boot{display:none!important}#skin-canvas{display:none!important}</style></noscript>
 </head>
 <body>
   <div class="boot" aria-hidden="true">
@@ -29,17 +30,17 @@
   <header class="chrome">
     <a class="chrome__brand" href="#inicio" aria-label="Dra. Marcele Camponogara — início">DRA. MARCELE</a>
     <div class="chrome__live"><i></i><span id="scene-name">harmonização / odontologia estética</span></div>
-    <button class="map-toggle" type="button" aria-expanded="false" aria-controls="site-map">
+    <button class="map-toggle" type="button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="site-map">
       <span>mapa</span><i></i><i></i>
     </button>
     <a class="chrome__cta" href="#contato">agendar <span>↗</span></a>
   </header>
 
-  <nav class="site-map" id="site-map" aria-hidden="true" inert>
+  <nav class="site-map" id="site-map" aria-label="Navegação principal" aria-hidden="true" inert>
     <div class="site-map__wash" aria-hidden="true"></div>
     <div class="site-map__head">
       <span>Dra. Marcele Camponogara</span>
-      <button class="map-close" type="button">fechar ×</button>
+      <button class="map-close" type="button" aria-label="Fechar menu de navegação">fechar ×</button>
     </div>
     <div class="site-map__links">
       <a href="#observacao"><small>conhecer</small><span>Harmonização</span></a>
@@ -55,26 +56,26 @@
     <section class="hero scene" id="inicio" data-scene="Dra. Marcele / Harmonização Orofacial" data-orb="#ef735c,#edc9bf,#241c20" data-orb-x="0.82" data-orb-y="0.02" data-orb-scale="0.92">
       <div class="hero__signal">cirurgiã-dentista<br>CRO-RS 23573</div>
 
-      <div class="hero__type" aria-label="Traços em harmonia">
-        <div class="hero__line hero__line--one"><span>TRAÇOS</span></div>
-        <div class="hero__line hero__line--two"><span>EM</span></div>
-        <div class="hero__line hero__line--three"><span>HARMONIA</span></div>
-      </div>
+      <h1 class="hero__type">
+        <span class="hero__line hero__line--one"><span>TRAÇOS</span></span>
+        <span class="hero__line hero__line--two"><span>EM</span></span>
+        <span class="hero__line hero__line--three"><span>HARMONIA</span></span>
+      </h1>
 
       <figure class="hero__portrait">
         <img
           src="https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=82&w=1600"
           srcset="https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=78&w=800 800w, https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=82&w=1600 1600w"
-          sizes="(max-width: 800px) 72vw, 36vw"
+          sizes="(max-width: 900px) 100vw, 36vw"
           alt="Retrato editorial em close, com textura natural da pele"
+          decoding="async"
           fetchpriority="high"
         />
-        <figcaption>harmonização orofacial / odontologia estética</figcaption>
+        <figcaption>expressão / proporção / naturalidade</figcaption>
       </figure>
 
-      <p class="hero__thought">Harmonização Orofacial Avançada, Clínica Geral e Ortodontia em São Gabriel.</p>
+      <p class="hero__thought">Harmonização Orofacial, Clínica Geral e Ortodontia em São Gabriel.</p>
       <a class="hero__start" href="#observacao"><span>conhecer</span><b>↓</b></a>
-      <div class="hero__axis" aria-hidden="true"><i></i><span>rosto</span><span>sorriso</span></div>
     </section>
 
     <section class="scan scene" id="observacao" data-scene="avaliação / expressão e proporção" data-orb="#d8ee72,#aab9e7,#111316" data-orb-x="-0.95" data-orb-y="-0.05" data-orb-scale="0.78">
@@ -85,8 +86,8 @@
           sizes="100vw"
           alt="Close editorial de pele sob luz quente" />
         <img class="scan__detail" loading="lazy" decoding="async"
-          src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=88&w=1400"
-          srcset="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=84&w=720 720w, https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=88&w=1400 1400w"
+          src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=78&w=1400"
+          srcset="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=76&w=720 720w, https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=78&w=1400 1400w"
           sizes="100vw"
           alt="" aria-hidden="true" />
         <div class="scan__ring" aria-hidden="true"><span>aproxime</span></div>
@@ -106,17 +107,17 @@
         <span>HARMONIZAÇÃO OROFACIAL — ODONTOLOGIA ESTÉTICA — ORTODONTIA — CLÍNICA GERAL — </span>
       </div>
       <p class="thesis__small">Tratamento começa por avaliação.</p>
-      <div class="thesis__words" aria-label="Avaliar. Planejar. Harmonizar.">
+      <h2 class="thesis__words">
         <span class="thesis-word thesis-word--a">AVALIAR.</span>
         <span class="thesis-word thesis-word--b">PLANEJAR.</span>
         <span class="thesis-word thesis-word--c">HARMONIZAR.</span>
-      </div>
+      </h2>
       <p class="thesis__note">A consulta organiza objetivos, possibilidades e indicação clínica antes de qualquer decisão.</p>
     </section>
 
     <section class="protocols scene" id="cuidados" data-scene="procedimentos / áreas de atuação" data-orb="#d8ee72,#ef735c,#19181e" data-orb-x="0.75" data-orb-y="0" data-orb-scale="0.72">
       <div class="protocols__pin">
-        <div class="protocols__rail" aria-hidden="true"><span>ARRASTE COM O SCROLL</span><i></i></div>
+        <div class="protocols__rail" aria-hidden="true"><span>ROLE PARA EXPLORAR</span><i></i></div>
         <div class="protocol-track">
           <article class="protocol-panel protocol-panel--intro">
             <p class="micro">[ áreas de atuação ]</p>
@@ -126,13 +127,12 @@
 
           <article class="protocol-panel protocol-panel--texture">
             <div class="protocol-panel__number">T</div>
-            <figure class="procedure-photo">
+            <figure>
               <img loading="lazy" decoding="async"
                 src="https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&fm=jpg&q=80&w=1200"
                 srcset="https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&fm=jpg&q=76&w=720 720w, https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&fm=jpg&q=80&w=1200 1200w"
                 sizes="(max-width: 900px) 100vw, 40vw"
                 alt="Profissional realizando cuidado facial em paciente" />
-              <figcaption>toxina botulínica / harmonização orofacial</figcaption>
             </figure>
             <div class="protocol-panel__text">
               <p class="micro">toxina botulínica</p>
@@ -152,19 +152,17 @@
               <div class="procedure-slot__cross" aria-hidden="true"></div>
               <span>SUA FOTO AQUI</span>
               <p>preenchimento • harmonização • consultório</p>
-              
             </div>
           </article>
 
           <article class="protocol-panel protocol-panel--expression">
             <div class="protocol-panel__number">S</div>
-            <figure class="procedure-photo">
+            <figure>
               <img loading="lazy" decoding="async"
                 src="https://images.unsplash.com/photo-1782159981435-78545e10428a?auto=format&fit=crop&fm=jpg&q=80&w=1200"
                 srcset="https://images.unsplash.com/photo-1782159981435-78545e10428a?auto=format&fit=crop&fm=jpg&q=76&w=720 720w, https://images.unsplash.com/photo-1782159981435-78545e10428a?auto=format&fit=crop&fm=jpg&q=80&w=1200 1200w"
                 sizes="(max-width: 900px) 100vw, 42vw"
                 alt="Profissional aplicando máscara de cuidado facial em paciente" />
-              <figcaption>odontologia estética / planejamento do sorriso</figcaption>
             </figure>
             <div class="protocol-panel__text">
               <p class="micro">odontologia estética</p>
@@ -188,19 +186,19 @@
         <h2>A consulta<br>começa por<br><em>uma avaliação.</em></h2>
       </div>
       <div class="ritual__steps">
-        <article data-step="escuta">
+        <article>
           <b>entender</b>
           <p>Queixa principal, objetivos e histórico são o ponto de partida da consulta.</p>
         </article>
-        <article data-step="leitura">
+        <article>
           <b>avaliar</b>
           <p>Estrutura facial, sorriso e indicação clínica são observados antes da escolha do procedimento.</p>
         </article>
-        <article data-step="decisão">
+        <article>
           <b>planejar</b>
           <p>As possibilidades são organizadas de acordo com o caso e explicadas antes do tratamento.</p>
         </article>
-        <article data-step="tempo">
+        <article>
           <b>acompanhar</b>
           <p>Retorno e acompanhamento fazem parte do cuidado quando indicados para o procedimento realizado.</p>
         </article>
