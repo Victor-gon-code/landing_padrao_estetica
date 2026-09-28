@@ -3,258 +3,192 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f3efe6" />
-  <meta name="description" content="Dra. Marcele Camponogara — Cirurgiã-Dentista, CRO-RS 23573. Harmonização Orofacial, Clínica Geral, Ortodontia e Odontologia Estética em São Gabriel, RS." />
+  <meta name="theme-color" content="#efe8df" />
+  <meta name="description" content="Estética Avançada Débora Bedin em São Gabriel, RS — estética facial, microagulhamento e depilação a laser." />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Dra. Marcele Camponogara — Harmonização Orofacial | São Gabriel</title>
-
+  <title>Estética Avançada Débora Bedin — São Gabriel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://images.unsplash.com" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <noscript><style>.boot{display:none!important}#skin-canvas{display:none!important}</style></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="debora-core.css" />
+  <link rel="stylesheet" href="debora-scenes.css" />
+  <link rel="stylesheet" href="debora-responsive.css" />
+  <noscript><style>.preloader{display:none!important}.webgl{display:none!important}.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
-  <div class="boot" aria-hidden="true">
-    <div class="boot__mark">MARCELE</div>
-    <div class="boot__line"><i></i></div>
-    <div class="boot__meta"><span>preparando experiência</span><b>00</b></div>
+  <div class="preloader" aria-hidden="true">
+    <div class="preloader__word"><span>DÉBORA</span><span>BEDIN</span></div>
+    <div class="preloader__track"><i></i></div>
+    <div class="preloader__meta"><small>estética avançada</small><b>00</b></div>
   </div>
 
-  <canvas id="skin-canvas" aria-hidden="true"></canvas>
-  <div class="webgl-fallback" aria-hidden="true"></div>
-  <div class="noise" aria-hidden="true"></div>
+  <canvas class="webgl" id="webgl" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><i></i><span>ver</span></div>
 
-  <header class="chrome">
-    <a class="chrome__brand" href="#inicio" aria-label="Dra. Marcele Camponogara — início">DRA. MARCELE</a>
-    <div class="chrome__live"><i></i><span id="scene-name">harmonização / odontologia estética</span></div>
-    <button class="map-toggle" type="button" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="site-map">
-      <span>mapa</span><i></i><i></i>
+  <header class="topbar">
+    <a class="topbar__brand" href="#inicio" aria-label="Estética Avançada Débora Bedin — início">
+      <span>DÉBORA</span><small>BEDIN</small>
+    </a>
+    <p class="topbar__context" id="scene-label">estética avançada / São Gabriel</p>
+    <button class="topbar__menu" type="button" aria-controls="menu" aria-expanded="false">
+      <span>menu</span><i></i><i></i>
     </button>
-    <a class="chrome__cta" href="#contato">agendar <span>↗</span></a>
+    <a class="topbar__action" href="#contato">agendar <b>↗</b></a>
   </header>
 
-  <nav class="site-map" id="site-map" aria-label="Navegação principal" aria-hidden="true" inert>
-    <div class="site-map__wash" aria-hidden="true"></div>
-    <div class="site-map__head">
-      <span>Dra. Marcele Camponogara</span>
-      <button class="map-close" type="button" aria-label="Fechar menu de navegação">fechar ×</button>
+  <aside class="menu" id="menu" aria-hidden="true" inert>
+    <div class="menu__wash" aria-hidden="true"></div>
+    <div class="menu__head">
+      <span>Estética Avançada Débora Bedin</span>
+      <button type="button" class="menu__close" aria-label="Fechar menu">fechar ×</button>
     </div>
-    <div class="site-map__links">
-      <a href="#observacao"><small>conhecer</small><span>Harmonização</span></a>
-      <a href="#cuidados"><small>explorar</small><span>Tratamentos</span></a>
-      <a href="#ritual"><small>entender</small><span>Consulta</span></a>
-      <a href="#espaco"><small>localizar</small><span>Consultório</span></a>
-      <a href="#contato"><small>marcar</small><span>Agendar</span></a>
-    </div>
-    <p class="site-map__foot">cirurgiã-dentista • CRO-RS 23573 • São Gabriel / RS</p>
-  </nav>
+    <nav class="menu__links" aria-label="Navegação principal">
+      <a href="#olhar"><small>01</small><span>O olhar</span></a>
+      <a href="#tratamentos"><small>02</small><span>Tratamentos</span></a>
+      <a href="#experiencia"><small>03</small><span>Experiência</span></a>
+      <a href="#espaco"><small>04</small><span>Espaço</span></a>
+      <a href="#contato"><small>05</small><span>Contato</span></a>
+    </nav>
+    <p class="menu__foot">R. Gen. Mallet, 211 • Centro • São Gabriel / RS</p>
+  </aside>
 
   <main>
-    <section class="hero scene" id="inicio" data-scene="Dra. Marcele / Harmonização Orofacial" data-orb="#ef735c,#edc9bf,#241c20" data-orb-x="0.82" data-orb-y="0.02" data-orb-scale="0.92">
-      <div class="hero__signal">cirurgiã-dentista<br>CRO-RS 23573</div>
-
-      <h1 class="hero__type">
-        <span class="hero__line hero__line--one"><span>TRAÇOS</span></span>
-        <span class="hero__line hero__line--two"><span>EM</span></span>
-        <span class="hero__line hero__line--three"><span>HARMONIA</span></span>
+    <section class="hero scene" id="inicio" data-scene="estética avançada / São Gabriel" data-tone="warm">
+      <div class="hero__eyebrow reveal">ESTÉTICA AVANÇADA • SÃO GABRIEL / RS</div>
+      <h1 class="hero__title" aria-label="Beleza em camadas">
+        <span class="hero__line hero__line--one"><i>BELEZA</i></span>
+        <span class="hero__line hero__line--two"><i>EM</i></span>
+        <span class="hero__line hero__line--three"><i>CAMADAS.</i></span>
       </h1>
-
-      <figure class="hero__portrait">
+      <figure class="hero__image image-warp" data-cursor="sentir">
         <img
-          src="https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=82&w=1600"
-          srcset="https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=78&w=800 800w, https://images.unsplash.com/photo-1585615015488-1c4a10ef203f?auto=format&fit=crop&fm=jpg&q=82&w=1600 1600w"
-          sizes="(max-width: 900px) 100vw, 36vw"
-          alt="Retrato editorial em close, com textura natural da pele"
-          decoding="async"
+          src="https://images.unsplash.com/photo-1667829181931-c4c8d2456621?auto=format&fit=crop&fm=jpg&q=84&w=1600"
+          srcset="https://images.unsplash.com/photo-1667829181931-c4c8d2456621?auto=format&fit=crop&fm=jpg&q=78&w=760 760w, https://images.unsplash.com/photo-1667829181931-c4c8d2456621?auto=format&fit=crop&fm=jpg&q=84&w=1600 1600w"
+          sizes="(max-width: 900px) 88vw, 34vw"
+          alt="Close editorial de pele sob luz natural"
           fetchpriority="high"
+          decoding="async"
         />
-        <figcaption>expressão / proporção / naturalidade</figcaption>
+        <figcaption><span>pele / textura / luz</span><small>01 — 05</small></figcaption>
       </figure>
-
-      <p class="hero__thought">Harmonização Orofacial, Clínica Geral e Ortodontia em São Gabriel.</p>
-      <a class="hero__start" href="#observacao"><span>conhecer</span><b>↓</b></a>
+      <p class="hero__intro reveal">Cuidado estético com leitura individual, tecnologia e espaço para você se reconhecer no resultado.</p>
+      <div class="hero__coords reveal"><span>30°20' S</span><i></i><span>54°19' O</span></div>
+      <a class="hero__scroll" href="#olhar"><span>descer</span><b>↓</b></a>
     </section>
 
-    <section class="scan scene" id="observacao" data-scene="avaliação / expressão e proporção" data-orb="#d8ee72,#aab9e7,#111316" data-orb-x="-0.95" data-orb-y="-0.05" data-orb-scale="0.78">
-      <div class="scan__media" id="scan-media">
-        <img class="scan__base" loading="lazy" decoding="async"
-          src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=78&w=1400"
-          srcset="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=76&w=720 720w, https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=78&w=1400 1400w"
-          sizes="100vw"
-          alt="Close editorial de pele sob luz quente" />
-        <img class="scan__detail" loading="lazy" decoding="async"
-          src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=78&w=1400"
-          srcset="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=76&w=720 720w, https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=78&w=1400 1400w"
-          sizes="100vw"
-          alt="" aria-hidden="true" />
-        <div class="scan__ring" aria-hidden="true"><span>aproxime</span></div>
+    <section class="observation scene" id="olhar" data-scene="olhar / antes do protocolo" data-tone="dark">
+      <div class="observation__word" aria-hidden="true">OLHAR</div>
+      <div class="observation__media image-warp" data-cursor="aproximar">
+        <img src="https://images.unsplash.com/photo-1767884139060-458f00bb75b1?auto=format&fit=crop&fm=jpg&q=82&w=1500" alt="Detalhe editorial de pele em luz quente" loading="lazy" decoding="async" />
+        <div class="observation__scanner" aria-hidden="true"><span></span><i></i></div>
+        <p class="observation__readout" aria-hidden="true"><span>TEXTURA</span><span>RESPOSTA</span><span>INDICAÇÃO</span></p>
       </div>
-      <div class="scan__copy">
-        <p class="micro">[ harmonização orofacial ]</p>
-        <h2>Cada rosto tem<br><em>uma leitura.</em></h2>
-        <p>A avaliação considera estrutura, proporção, movimento e os objetivos apresentados em consulta antes da definição do tratamento.</p>
+      <div class="observation__copy reveal">
+        <p class="kicker">[ antes de qualquer protocolo ]</p>
+        <h2>Primeiro,<br><em>entender a pele.</em></h2>
+        <p>Estética avançada não precisa parecer apressada. O ponto de partida é observar o que existe hoje, o que incomoda e o que faz sentido tratar.</p>
       </div>
-      <div class="scan__readout" aria-hidden="true">
-        <span>EXPRESSÃO</span><span>PROPORÇÃO</span><span>PLANEJAMENTO</span>
-      </div>
+      <div class="observation__aside reveal"><span>menos fórmula pronta</span><span>mais leitura individual</span></div>
     </section>
 
-    <section class="thesis scene" data-scene="avaliar / planejar / harmonizar" data-orb="#ef735c,#ead7dc,#171216" data-orb-x="0" data-orb-y="0.02" data-orb-scale="1.35">
-      <div class="thesis__ticker" aria-hidden="true">
-        <span>HARMONIZAÇÃO OROFACIAL — ODONTOLOGIA ESTÉTICA — ORTODONTIA — CLÍNICA GERAL — </span>
-      </div>
-      <p class="thesis__small">Tratamento começa por avaliação.</p>
-      <h2 class="thesis__words">
-        <span class="thesis-word thesis-word--a">AVALIAR.</span>
-        <span class="thesis-word thesis-word--b">PLANEJAR.</span>
-        <span class="thesis-word thesis-word--c">HARMONIZAR.</span>
+    <section class="statement scene" data-scene="matéria / tecnologia com propósito" data-tone="cream">
+      <div class="statement__ticker" aria-hidden="true"><div>PELE É TECIDO VIVO — TECNOLOGIA É FERRAMENTA — CUIDADO É PRESENÇA — PELE É TECIDO VIVO — TECNOLOGIA É FERRAMENTA — CUIDADO É PRESENÇA — </div></div>
+      <p class="statement__lead reveal">O avançado não está em fazer mais.</p>
+      <h2 class="statement__type">
+        <span class="reveal">ESTÁ EM</span>
+        <span class="reveal"><em>ESCOLHER</em></span>
+        <span class="reveal">MELHOR.</span>
       </h2>
-      <p class="thesis__note">A consulta organiza objetivos, possibilidades e indicação clínica antes de qualquer decisão.</p>
+      <p class="statement__foot reveal">Uma experiência que fala de estética sem transformar você em um “antes e depois”.</p>
     </section>
 
-    <section class="protocols scene" id="cuidados" data-scene="procedimentos / áreas de atuação" data-orb="#d8ee72,#ef735c,#19181e" data-orb-x="0.75" data-orb-y="0" data-orb-scale="0.72">
-      <div class="protocols__pin">
-        <div class="protocols__rail" aria-hidden="true"><span>ROLE PARA EXPLORAR</span><i></i></div>
-        <div class="protocol-track">
-          <article class="protocol-panel protocol-panel--intro">
-            <p class="micro">[ áreas de atuação ]</p>
-            <h2>Técnica<br>para cada<br><em>indicação.</em></h2>
-            <p class="protocol-panel__copy">A escolha do procedimento parte da avaliação clínica e da indicação para cada caso.</p>
-          </article>
-
-          <article class="protocol-panel protocol-panel--texture">
-            <div class="protocol-panel__number">T</div>
-            <figure>
-              <img loading="lazy" decoding="async"
-                src="https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&fm=jpg&q=80&w=1200"
-                srcset="https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&fm=jpg&q=76&w=720 720w, https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&fm=jpg&q=80&w=1200 1200w"
-                sizes="(max-width: 900px) 100vw, 40vw"
-                alt="Profissional realizando cuidado facial em paciente" />
-            </figure>
-            <div class="protocol-panel__text">
-              <p class="micro">toxina botulínica</p>
-              <h3>Expressão<br>tratada com<br>precisão.</h3>
-              <p>Aplicação de toxina botulínica tipo A para fins estéticos e funcionais, conforme avaliação e indicação clínica.</p>
-            </div>
-          </article>
-
-          <article class="protocol-panel protocol-panel--structure">
-            <div class="protocol-panel__number">P</div>
-            <div class="protocol-panel__text">
-              <p class="micro">preenchimento facial</p>
-              <h3>Volume e<br>contorno<br>com critério.</h3>
-              <p>Lábios, sulcos, olheiras, mento, mandíbula e região malar podem ser avaliados para preenchimento com ácido hialurônico.</p>
-            </div>
-            <div class="procedure-slot" aria-label="Espaço reservado para fotografia real do procedimento">
-              <div class="procedure-slot__cross" aria-hidden="true"></div>
-              <span>SUA FOTO AQUI</span>
-              <p>preenchimento • harmonização • consultório</p>
-            </div>
-          </article>
-
-          <article class="protocol-panel protocol-panel--expression">
-            <div class="protocol-panel__number">S</div>
-            <figure>
-              <img loading="lazy" decoding="async"
-                src="https://images.unsplash.com/photo-1782159981435-78545e10428a?auto=format&fit=crop&fm=jpg&q=80&w=1200"
-                srcset="https://images.unsplash.com/photo-1782159981435-78545e10428a?auto=format&fit=crop&fm=jpg&q=76&w=720 720w, https://images.unsplash.com/photo-1782159981435-78545e10428a?auto=format&fit=crop&fm=jpg&q=80&w=1200 1200w"
-                sizes="(max-width: 900px) 100vw, 42vw"
-                alt="Profissional aplicando máscara de cuidado facial em paciente" />
-            </figure>
-            <div class="protocol-panel__text">
-              <p class="micro">odontologia estética</p>
-              <h3>Estética que<br>também passa<br>pelo sorriso.</h3>
-              <p>Clareamento, facetas, lentes de contato e restaurações estéticas fazem parte das possibilidades de tratamento odontológico.</p>
-            </div>
-          </article>
-
-          <article class="protocol-panel protocol-panel--end">
-            <p class="micro">a consulta</p>
-            <h3>Cada caso<br>pede um<br><em>plano.</em></h3>
-            <a href="#contato">agendar avaliação ↗</a>
-          </article>
-        </div>
+    <section class="treatments scene" id="tratamentos" data-scene="tratamentos / possibilidades" data-tone="rose">
+      <div class="treatments__head reveal">
+        <p class="kicker">[ possibilidades de cuidado ]</p>
+        <h2>Três caminhos.<br><em>Nenhum automático.</em></h2>
+        <p>As opções abaixo fazem parte da atuação pública encontrada para a Estética Avançada Débora Bedin. A indicação depende de avaliação e do objetivo de cada pessoa.</p>
       </div>
-    </section>
-
-    <section class="ritual scene" id="ritual" data-scene="consulta / avaliação clínica" data-orb="#aab9e7,#efe8d5,#17161a" data-orb-x="-0.65" data-orb-y="0" data-orb-scale="1.02">
-      <div class="ritual__sticky">
-        <p class="micro">[ consulta e planejamento ]</p>
-        <h2>A consulta<br>começa por<br><em>uma avaliação.</em></h2>
-      </div>
-      <div class="ritual__steps">
-        <article>
-          <b>entender</b>
-          <p>Queixa principal, objetivos e histórico são o ponto de partida da consulta.</p>
+      <div class="treatment-list">
+        <article class="treatment-item is-active" data-index="01" data-photo="face">
+          <button type="button" aria-expanded="true"><span class="treatment-item__index">01</span><span class="treatment-item__name">Estética facial</span><span class="treatment-item__arrow">↗</span></button>
+          <div class="treatment-item__body"><p>Protocolos voltados ao cuidado da pele e à estética facial, escolhidos conforme avaliação.</p><span>pele • textura • cuidado</span></div>
         </article>
-        <article>
-          <b>avaliar</b>
-          <p>Estrutura facial, sorriso e indicação clínica são observados antes da escolha do procedimento.</p>
+        <article class="treatment-item" data-index="02" data-photo="needle">
+          <button type="button" aria-expanded="false"><span class="treatment-item__index">02</span><span class="treatment-item__name">Microagulhamento</span><span class="treatment-item__arrow">↗</span></button>
+          <div class="treatment-item__body"><p>Procedimento realizado com microperfurações controladas, quando houver indicação para o caso.</p><span>avaliação • técnica • acompanhamento</span></div>
         </article>
-        <article>
-          <b>planejar</b>
-          <p>As possibilidades são organizadas de acordo com o caso e explicadas antes do tratamento.</p>
-        </article>
-        <article>
-          <b>acompanhar</b>
-          <p>Retorno e acompanhamento fazem parte do cuidado quando indicados para o procedimento realizado.</p>
+        <article class="treatment-item" data-index="03" data-photo="laser">
+          <button type="button" aria-expanded="false"><span class="treatment-item__index">03</span><span class="treatment-item__name">Depilação a laser</span><span class="treatment-item__arrow">↗</span></button>
+          <div class="treatment-item__body"><p>Tratamento com tecnologia de luz para redução progressiva de pelos, respeitando área, pele e indicação.</p><span>tecnologia • conforto • rotina</span></div>
         </article>
       </div>
-    </section>
-
-    <section class="room scene" id="espaco" data-scene="consultório / São Gabriel" data-orb="#ef735c,#d8ee72,#131316" data-orb-x="0.9" data-orb-y="0" data-orb-scale="0.65">
-      <div class="room__image">
-        <img loading="lazy" decoding="async"
-          src="https://images.unsplash.com/photo-1704455306251-b4634215d98f?auto=format&fit=crop&fm=jpg&q=80&w=1600"
-          srcset="https://images.unsplash.com/photo-1704455306251-b4634215d98f?auto=format&fit=crop&fm=jpg&q=76&w=800 800w, https://images.unsplash.com/photo-1704455306251-b4634215d98f?auto=format&fit=crop&fm=jpg&q=80&w=1600 1600w"
-          sizes="100vw"
-          alt="Ambiente clínico contemporâneo e iluminado" />
-        <div class="room__shutter room__shutter--a"></div>
-        <div class="room__shutter room__shutter--b"></div>
-      </div>
-      <div class="room__caption">
-        <p class="micro">[ atendimento em São Gabriel ]</p>
-        <h2>Consultório<br>no Centro<br><em>da cidade.</em></h2>
-        <p>Avenida Dr. Celestino Cavalheiro, 660 • Centro • São Gabriel, RS.</p>
-      </div>
-      <div class="room__coord">AV. DR. CELESTINO CAVALHEIRO, 660<br>CENTRO • SÃO GABRIEL / RS</div>
-    </section>
-
-    <section class="questions scene" data-scene="informações / antes de agendar" data-orb="#ead7dc,#ef735c,#19151a" data-orb-x="-0.9" data-orb-y="0.05" data-orb-scale="0.85">
-      <div class="questions__title">
-        <p class="micro">[ informações rápidas ]</p>
-        <h2>PER<br>GUN<br><em>TE.</em></h2>
-      </div>
-      <div class="questions__list">
-        <details open>
-          <summary><span>Quais áreas são atendidas?</span><b>+</b></summary>
-          <p>Harmonização Orofacial, Clínica Geral, Ortodontia e Odontologia Estética, além de procedimentos compatíveis com a avaliação de cada caso.</p>
-        </details>
-        <details>
-          <summary><span>Onde fica o consultório?</span><b>+</b></summary>
-          <p>Avenida Dr. Celestino Cavalheiro, 660, Centro, São Gabriel — RS.</p>
-        </details>
-        <details>
-          <summary><span>Como faço para agendar?</span><b>+</b></summary>
-          <p>Entre em contato pelo WhatsApp (55) 99688-4525. O atendimento ocorre de segunda a sexta; confirme o horário disponível diretamente pelo contato.</p>
-        </details>
+      <div class="treatments__visual" aria-hidden="true">
+        <figure class="treatments__photo treatments__photo--face is-visible"><img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&fm=jpg&q=82&w=1300" alt="" /></figure>
+        <figure class="treatments__photo treatments__photo--needle"><img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1580281658628-5264f6f79d10?auto=format&fit=crop&fm=jpg&q=82&w=1300" alt="" /></figure>
+        <figure class="treatments__photo treatments__photo--laser"><img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&fm=jpg&q=82&w=1300" alt="" /></figure>
+        <div class="treatments__stamp"><span>DÉBORA</span><b>BEDIN</b><i>ESTÉTICA AVANÇADA</i></div>
       </div>
     </section>
 
-    <section class="contact scene" id="contato" data-scene="agendamento / WhatsApp" data-orb="#d8ee72,#ef735c,#121315" data-orb-x="0.72" data-orb-y="0" data-orb-scale="1.22">
-      <div class="contact__eyeline">DRA. MARCELE CAMPONOGARA • CRO-RS 23573 • SÃO GABRIEL •</div>
-      <h2><span>AGENDE</span><br><em>SUA</em><br><span>AVALIAÇÃO.</span></h2>
-      <a class="contact__button" href="https://wa.me/5555996884525?text=Oi%2C%20Dra.%20Marcele%2C%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o." target="_blank" rel="noopener">
-        <span>WhatsApp • (55) 99688-4525</span><b>↗</b>
-      </a>
-      <div class="contact__meta">
-        <span>Dra. Marcele Camponogara • CRO-RS 23573</span>
-        <span>Av. Dr. Celestino Cavalheiro, 660</span>
-        <span>São Gabriel / RS</span>
+    <section class="lab scene" id="experiencia" data-scene="experiência / entre técnica e cuidado" data-tone="ink">
+      <div class="lab__grid" aria-hidden="true"></div>
+      <p class="lab__eyebrow reveal">[ não é sobre correr para o procedimento ]</p>
+      <h2 class="lab__title"><span class="reveal">CONVERSA.</span><span class="reveal">LEITURA.</span><span class="reveal">ESCOLHA.</span></h2>
+      <div class="lab__timeline">
+        <article class="reveal"><b>01</b><h3>Você chega com uma vontade.</h3><p>O primeiro passo é colocar em palavras o que você deseja cuidar — sem transformar todo incômodo em procedimento.</p></article>
+        <article class="reveal"><b>02</b><h3>A pele entra na conversa.</h3><p>Condição da pele, rotina e objetivos ajudam a organizar quais possibilidades merecem ser consideradas.</p></article>
+        <article class="reveal"><b>03</b><h3>O plano precisa caber em você.</h3><p>O cuidado pode ser pontual ou construído ao longo do tempo. O importante é a escolha fazer sentido.</p></article>
       </div>
+      <div class="lab__orb-note" aria-hidden="true">mova o cursor<br>sobre a matéria</div>
+    </section>
+
+    <section class="gallery scene" data-scene="textura / detalhes que ficam" data-tone="cream">
+      <div class="gallery__intro reveal">
+        <p class="kicker">[ estética também é detalhe ]</p>
+        <h2>Nem tudo<br>precisa ser<br><em>perfeito.</em></h2>
+      </div>
+      <div class="gallery__stage">
+        <figure class="gallery__shot gallery__shot--a image-warp" data-cursor="01"><img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&fm=jpg&q=80&w=1200" alt="Detalhe de pele e rosto" /><figcaption>textura real</figcaption></figure>
+        <figure class="gallery__shot gallery__shot--b image-warp" data-cursor="02"><img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&fm=jpg&q=80&w=1200" alt="Cuidado facial em ambiente de estética" /><figcaption>tempo de cuidado</figcaption></figure>
+        <figure class="gallery__shot gallery__shot--c image-warp" data-cursor="03"><img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1619451334792-150fd785ee74?auto=format&fit=crop&fm=jpg&q=80&w=1200" alt="Detalhe de produtos e cuidado com a pele" /><figcaption>ritual e rotina</figcaption></figure>
+      </div>
+      <p class="gallery__note reveal">As imagens desta apresentação são editoriais. Em uma versão publicada, entram fotos autorizadas da Débora, do espaço e dos atendimentos.</p>
+    </section>
+
+    <section class="place scene" id="espaco" data-scene="espaço / Centro de São Gabriel" data-tone="olive">
+      <div class="place__image image-warp" data-cursor="entrar">
+        <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1704455306251-b4634215d98f?auto=format&fit=crop&fm=jpg&q=82&w=1700" alt="Ambiente contemporâneo de atendimento estético" />
+        <div class="place__curtain place__curtain--a" aria-hidden="true"></div><div class="place__curtain place__curtain--b" aria-hidden="true"></div>
+      </div>
+      <div class="place__copy reveal">
+        <p class="kicker">[ atendimento no Centro ]</p>
+        <h2>Um endereço<br>para colocar<br><em>o cuidado em pausa.</em></h2>
+        <p>Rua General Mallet, nº 211<br>Centro • São Gabriel / RS</p>
+      </div>
+      <div class="place__hours reveal"><span>segunda — sexta</span><b>09:00 — 12:00</b><b>14:00 — 18:00</b><small>horários públicos consultados; confirme antes de ir</small></div>
+      <div class="place__number" aria-hidden="true">211</div>
+    </section>
+
+    <section class="faq scene" data-scene="informações / sem rodeio" data-tone="paper">
+      <div class="faq__head reveal"><p class="kicker">[ antes de marcar ]</p><h2>O que vale<br><em>perguntar.</em></h2></div>
+      <div class="faq__list">
+        <details open><summary><span>Quais tratamentos aparecem nesta apresentação?</span><b>+</b></summary><p>Estética facial, microagulhamento e depilação a laser — serviços encontrados em listagens públicas da clínica. Outros procedimentos podem ser confirmados diretamente com o espaço.</p></details>
+        <details><summary><span>Onde fica a Estética Avançada Débora Bedin?</span><b>+</b></summary><p>Rua General Mallet, nº 211, Centro, São Gabriel — RS.</p></details>
+        <details><summary><span>Qual o horário de atendimento?</span><b>+</b></summary><p>As listagens públicas atuais indicam atendimento de segunda a sexta, das 9h às 12h e das 14h às 18h. Vale confirmar antes do deslocamento.</p></details>
+        <details><summary><span>Como entrar em contato?</span><b>+</b></summary><p>O telefone público listado para a clínica é (55) 3232-1710.</p></details>
+      </div>
+    </section>
+
+    <section class="contact scene" id="contato" data-scene="contato / começar por uma conversa" data-tone="contact">
+      <div class="contact__marquee" aria-hidden="true"><span>DÉBORA BEDIN — ESTÉTICA AVANÇADA — SÃO GABRIEL — DÉBORA BEDIN — ESTÉTICA AVANÇADA — SÃO GABRIEL — </span></div>
+      <p class="contact__eyebrow reveal">[ o próximo passo pode ser simples ]</p>
+      <h2 class="contact__title"><span class="reveal">COMEÇA</span><span class="reveal"><em>COM UMA</em></span><span class="reveal">CONVERSA.</span></h2>
+      <a class="contact__button magnetic" href="tel:+555532321710"><span>ligar • (55) 3232-1710</span><b>↗</b></a>
+      <div class="contact__meta reveal"><span>Estética Avançada Débora Bedin</span><span>R. Gen. Mallet, 211 • Centro</span><span>São Gabriel / RS</span></div>
+      <div class="contact__signature" aria-hidden="true">D.B.</div>
     </section>
   </main>
 
