@@ -1485,3 +1485,138 @@ body.no-motion-lib .protocols__rail { display: none; }
 @media (max-width: 900px) {
   .ritual { padding-top: 160px; }
 }
+
+
+/* ==========================================================================
+   DRA. MARCELE CAMPONOGARA — branch-specific composition
+   Keeps long professional/service names clear without changing the base system.
+   ========================================================================== */
+.chrome__brand {
+  white-space: nowrap;
+}
+
+.hero__line--one span {
+  font-size: clamp(76px, 11.8vw, 184px);
+}
+
+.hero__line--two span {
+  font-size: clamp(88px, 14vw, 216px);
+}
+
+.hero__line--three {
+  margin-left: 19vw;
+}
+
+.hero__line--three span {
+  font-size: clamp(70px, 10.2vw, 158px);
+}
+
+.thesis-word--a {
+  font-size: clamp(80px, 13.2vw, 205px);
+}
+
+.thesis-word--b {
+  font-size: clamp(76px, 12vw, 188px);
+}
+
+.thesis-word--c {
+  font-size: clamp(66px, 10.3vw, 160px);
+  margin-left: 20vw;
+}
+
+.site-map__links span {
+  font-size: clamp(40px, 6.3vw, 96px);
+}
+
+.room__coord {
+  max-width: 330px;
+  line-height: 1.55;
+}
+
+.contact h2 {
+  font-size: clamp(82px, 12.8vw, 198px);
+}
+
+.contact__button span {
+  line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+  .hero__line--one span {
+    font-size: clamp(70px, 19.5vw, 108px);
+  }
+
+  .hero__line--two span {
+    font-size: clamp(78px, 22vw, 120px);
+  }
+
+  .hero__line--three {
+    padding-left: 13vw;
+  }
+
+  .hero__line--three span {
+    font-size: clamp(62px, 16.5vw, 90px);
+  }
+
+  .thesis-word--a {
+    font-size: clamp(70px, 18vw, 96px);
+  }
+
+  .thesis-word--b {
+    font-size: clamp(66px, 16.7vw, 90px);
+  }
+
+  .thesis-word--c {
+    font-size: clamp(58px, 14.2vw, 78px);
+    margin-left: 4vw;
+  }
+
+  .site-map__links span {
+    font-size: clamp(42px, 10.8vw, 62px);
+  }
+
+  .room__coord {
+    max-width: calc(100vw - 36px);
+    text-align: right;
+    line-height: 1.45;
+  }
+
+  .contact h2 {
+    font-size: clamp(62px, 16.2vw, 88px);
+  }
+
+  .contact__button {
+    gap: 16px;
+  }
+
+  .contact__button span {
+    font-size: 9px;
+    letter-spacing: .075em;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero__line--three {
+    padding-left: 8vw;
+  }
+
+  .hero__line--three span {
+    font-size: 15.2vw;
+  }
+
+  .thesis-word--c {
+    font-size: 13vw;
+  }
+
+  .site-map__links span {
+    font-size: 10.2vw;
+  }
+
+  .contact h2 {
+    font-size: 15.5vw;
+  }
+
+  .contact__button span {
+    font-size: 8px;
+  }
+}
