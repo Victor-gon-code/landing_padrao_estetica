@@ -16,7 +16,10 @@
     bootNumber.textContent = String(Math.round(progress)).padStart(2, '0');
   }, 85);
 
+  let bootFinished = false;
   function finishBoot() {
+    if (bootFinished) return;
+    bootFinished = true;
     clearInterval(loaderTimer);
     bootBar.style.width = '100%';
     bootNumber.textContent = '100';
@@ -49,7 +52,10 @@
   const sceneName = qs('#scene-name');
   const sceneObserver = new IntersectionObserver((entries) => {
     const active = entries.filter(x => x.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (active && sceneName) sceneName.textContent = active.target.dataset.scene || '';
+    if (active) {
+      if (sceneName) sceneName.textContent = active.target.dataset.scene || '';
+      if (typeof setOrbState === 'function') setOrbState(active.target);
+    }
   }, { threshold: [.2, .42, .62], rootMargin: '-14% 0px -24% 0px' });
   qsa('.scene').forEach(s => sceneObserver.observe(s));
 
@@ -220,7 +226,8 @@
   function render(now = 0) {
     requestAnimationFrame(render);
     if (!webglReady || !renderEnabled) return;
-    if (lowPower && now - lastFrame < 30) return;
+    const frameBudget = lowPower ? 33 : (reduceMotion ? 100 : 22);
+    if (now - lastFrame < frameBudget) return;
     lastFrame = now;
     mouseX += (targetX - mouseX) * .045;
     mouseY += (targetY - mouseY) * .045;
@@ -233,6 +240,10 @@
   render();
 
   // ---------- GSAP choreography ----------
+  if (!window.gsap || !window.ScrollTrigger) {
+    document.body.classList.add('no-motion-lib');
+  }
+
   if (window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -266,7 +277,7 @@
       gsap.to('.thesis-word--b', { xPercent: -10, ease: 'none', scrollTrigger: { trigger: '.thesis', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('.thesis-word--c', { xPercent: 7, ease: 'none', scrollTrigger: { trigger: '.thesis', start: 'top bottom', end: 'bottom top', scrub: 1 } });
 
-      gsap.fromTo('.room__shutter--a', { xPercent: 0 }, { xPercent: -101, ease: 'none', scrollTrigger: { triggger: '.room', start: 'top 70%', end: 'top 18%', scrub: 1 } });
+      gsap.fromTo('.room__shutter--a', { xPercent: 0 }, { xPercent: -101, ease: 'none', scrollTrigger: { trigger: '.room', start: 'top 70%', end: 'top 18%', scrub: 1 } });
       gsap.fromTo('.room__shutter--b', { xPercent: 0 }, { xPercent: 101, ease: 'none', scrollTrigger: { trigger: '.room', start: 'top 70%', end: 'top 18%', scrub: 1 } });
       gsap.to('.room__image img', { scale: 1.12, ease: 'none', scrollTrigger: { trigger: '.room', start: 'top bottom', end: 'bottom top', scrub: 1.2 } });
     }
@@ -300,7 +311,7 @@
         opacity: .22,
         y: 55,
         scrollTrigger: {
-          triggger: item,
+          trigger: item,
           start: 'top 82%',
           end: 'top 45%',
           scrub: .7
@@ -313,6 +324,7 @@
     });
 
     ScrollTrigger.addEventListener('refreshInit', resizeWebGL);
+    addEventListener('load', () => requestAnimationFrame(() => ScrollTrigger.refresh()), { once: true });
   }
 
   // FAQ: keep only one open at a time on compact screens.
