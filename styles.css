@@ -1620,3 +1620,173 @@ body.no-motion-lib .protocols__rail { display: none; }
     font-size: 8px;
   }
 }
+
+
+/* ==========================================================================
+   FINAL DEPLOY QA — transition-safe composition
+   Decorative motion stays behind content and every chapter reserves a clean
+   reading zone before the next color seam.
+   ========================================================================== */
+.scene-bridge {
+  z-index: 1;
+  height: clamp(82px, 8vw, 128px);
+}
+
+.scene-bridge--top {
+  z-index: 1;
+}
+
+/* Text/content layers always win over decorative transitions and WebGL. */
+.hero__signal,
+.hero__type,
+.hero__portrait,
+.hero__thought,
+.hero__start,
+.hero__axis,
+.scan__copy,
+.scan__readout,
+.thesis__ticker,
+.thesis__small,
+.thesis__words,
+.thesis__note,
+.protocols__pin,
+.ritual__sticky,
+.ritual__steps,
+.room__caption,
+.room__coord,
+.questions__title,
+.questions__list,
+.contact__eyeline,
+.contact h2,
+.contact__button,
+.contact__meta {
+  z-index: 5;
+}
+
+/* Keep the final information in each scene outside the animated seam. */
+@media (min-width: 901px) {
+  .hero__thought,
+  .hero__start {
+    bottom: clamp(118px, 13vh, 158px);
+  }
+
+  .scan__readout {
+    bottom: clamp(116px, 12vh, 150px);
+  }
+
+  .thesis {
+    padding-bottom: clamp(190px, 20vh, 260px);
+  }
+
+  .ritual {
+    padding-bottom: clamp(210px, 21vh, 280px);
+  }
+
+  .room__coord {
+    bottom: clamp(118px, 12vh, 152px);
+  }
+
+  .questions {
+    padding-bottom: clamp(240px, 25vh, 330px);
+  }
+
+  .questions__title {
+    z-index: 6;
+    align-self: start;
+  }
+
+  .questions__list {
+    z-index: 6;
+    padding-bottom: 72px;
+  }
+
+  .thesis__ticker {
+    top: 74px;
+  }
+}
+
+@media (max-width: 900px) {
+  .scene-bridge {
+    height: clamp(70px, 20vw, 98px);
+  }
+
+  .hero {
+    padding-bottom: 150px;
+  }
+
+  .scan__copy {
+    bottom: 186px;
+  }
+
+  .scan__readout {
+    bottom: 126px;
+  }
+
+  .thesis {
+    padding-bottom: 166px;
+  }
+
+  .ritual {
+    padding-top: 150px;
+    padding-bottom: 168px;
+  }
+
+  .room__caption {
+    padding-bottom: 176px;
+  }
+
+  .questions {
+    padding-top: 124px;
+    padding-bottom: 186px;
+  }
+
+  .questions__title,
+  .questions__list {
+    position: relative;
+    z-index: 6;
+  }
+
+  .questions__title {
+    top: auto;
+  }
+
+  .questions__list {
+    padding-bottom: 22px;
+  }
+
+  .thesis__ticker {
+    top: 62px;
+  }
+}
+
+@media (max-width: 390px) {
+  .scene-bridge {
+    height: 74px;
+  }
+
+  .hero {
+    padding-bottom: 136px;
+  }
+
+  .scan__copy {
+    bottom: 172px;
+  }
+
+  .scan__readout {
+    bottom: 118px;
+  }
+
+  .thesis,
+  .ritual {
+    padding-bottom: 150px;
+  }
+
+  .room__caption {
+    padding-bottom: 158px;
+  }
+
+  .questions {
+    padding-top: 112px;
+    padding-bottom: 166px;
+  }
+}
